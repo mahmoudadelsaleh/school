@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>البحث عن الرقم القومي</title>
-    <!-- لا حاجة لمكتبة SheetJS الآن لأن البيانات مدمجة -->
+    <!-- استعادة مكتبة SheetJS لقراءة ملف الإكسيل -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { box-sizing: border-box; }
         body, html {
@@ -151,10 +152,11 @@
         }
         .file-status {
             font-size: 14px;
-            color: #10b981;
+            color: #d4af37;
             text-align: center;
             margin-bottom: 15px;
             font-weight: bold;
+            transition: color 0.3s;
         }
         
         /* إخفاء منطقة البيانات تماماً */
@@ -169,7 +171,7 @@
     <div class="header">البحث عن الرقم القومي</div>
     
     <div class="content">
-        <div id="fileStatusMsg" class="file-status">✅ البيانات مدمجة وجاهزة للبحث السريع</div>
+        <div id="fileStatusMsg" class="file-status">⏳ جاري تحميل البيانات من بيرول.xlsx...</div>
         
         <div>
             <input type="text" id="searchInput" placeholder="أدخل جزء من الاسم للبحث..." onkeyup="if(event.key === 'Enter') searchName()">
@@ -179,20 +181,45 @@
             </div>
         </div>
 
-        <!-- البيانات مدمجة هنا مباشرة ومخفية عن المستخدم -->
-        <textarea id="dataInput">
-1	عزة عثمان إسماعيل العشماوى	27202071801903	1343-21	101213
-2	سوزان عطيه عبد العزيز محمد	26810120200186	1344-21	101213
-3	مصطفى كامل علي الطنطاوي	27111301801074	1345-21	101213
-4	عزة عطيه عبده بسيوني	27206241801283	1346-21	101213
-        </textarea>
+        <!-- تم حذف البيانات الإرشادية - سيتم وضع بيانات الإكسيل هنا برمجياً ليعالجها الكود -->
+        <textarea id="dataInput"></textarea>
     </div>
 </div>
 
 <script>
     let records = [];
 
-    // قراءة البيانات من النص المدمج في الصفحة
+    // دالة جلب ملف الإكسيل التلقائي من المستودع
+    async function loadDefaultExcel() {
+        const statusMsg = document.getElementById('fileStatusMsg');
+        try {
+            const response = await fetch('بيرول.xlsx');
+            if (response.ok) {
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                const firstSheet = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheet];
+                
+                // تحويل الشيت إلى نص مفصول بمسافات ليعالجه الكود
+                const csvText = XLSX.utils.sheet_to_csv(worksheet, { FS: '\t' });
+                document.getElementById('dataInput').value = csvText;
+                
+                parseData();
+                
+                statusMsg.innerText = '✅ تم تحميل البيانات من ملف "بيرول.xlsx" بنجاح';
+                statusMsg.style.color = '#10b981'; // أخضر
+            } else {
+                statusMsg.innerText = '⚠️ ملف "بيرول.xlsx" غير موجود في المسار الحالي.';
+                statusMsg.style.color = '#ef4444'; // أحمر
+            }
+        } catch (error) {
+            console.error('تعذر جلب ملف بيرول.xlsx:', error);
+            statusMsg.innerText = '❌ حدث خطأ أثناء قراءة الملف.';
+            statusMsg.style.color = '#ef4444';
+        }
+    }
+
+    // قراءة البيانات من النص المستخرج
     function parseData() {
         const text = document.getElementById('dataInput').value.trim();
         const lines = text.split('\n');
@@ -218,7 +245,6 @@
                 }
             } 
             
-            // احتياطي للملصق بدون مسافات
             if (!name || !id) {
                 const match = line.match(/(?:\d+)?\s*([أ-يa-zA-Z\s]+?)\s*(\d{14})/);
                 if (match) {
@@ -285,9 +311,9 @@
         });
     }
 
-    // تجهيز البيانات فور تحميل الصفحة
+    // تحميل ملف الإكسيل فوراً عند فتح الصفحة
     window.addEventListener('DOMContentLoaded', () => {
-        parseData();
+        loadDefaultExcel();
     });
 
 </script>
