@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>البحث عن الرقم القومي</title>
+    <!-- تضمين مكتبة SheetJS لقراءة ملفات إكسيل -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body, html {
+            margin: 0; padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #f3f4f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: #1d4ed8;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .tabs {
+            display: flex;
+            background: #e5e7eb;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: #4b5563;
+            transition: 0.3s;
+        }
+        .tab.active {
+            background: #ffffff;
+            color: #1d4ed8;
+            border-bottom: 3px solid #1d4ed8;
+        }
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            overflow: hidden;
+        }
+        .panel {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+        .panel.active { display: flex; }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            outline: none;
+        }
+        input[type="text"]:focus { border-color: #1d4ed8; }
+        button.primary-btn {
+            background: #1d4ed8;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .result-container {
+            flex: 1;
+            margin-top: 15px;
+            background: #f9fafb;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        
+        textarea {
+            flex: 1;
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            resize: none;
+            font-family: monospace;
+            font-size: 14px;
+            margin-bottom: 15px;
+            outline: none;
+            white-space: pre;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+        }
+        .btn-export { background: #059669; }
+        .btn-import { background: #d97706; display: inline-block; }
+        input[type="file"] { display: none; }
+        
+        .single-result { text-align: center; font-size: 18px; }
+        .single-result .id-number { font-size: 24px; color: #1d4ed8; font-weight: bold; display: block; margin-top: 10px; letter-spacing: 2px;}
+        .list-result { width: 100%; }
+        .list-item { padding: 10px; border-bottom: 1px solid #e5e7eb; }
+        .list-item:last-child { border-bottom: none; }
+        .list-item .id-number { color: #1d4ed8; font-weight: bold; float: left; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">البحث عن الرقم القومي</div>
+    
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('search')">البحث</div>
+        <div class="tab" onclick="switchTab('data')">البيانات (إكسيل)</div>
+    </div>
+    
+    <div class="content">
+        <div id="panel-search" class="panel active">
+            <input type="text" id="searchInput" placeholder="أدخل جزء من الاسم للبحث..." onkeyup="if(event.key === 'Enter') searchName()">
+            <button class="primary-btn" onclick="searchName()">بحث</button>
+            <div class="result-container" id="resultBox">
+                <span style="color: #6b7280;">النتيجة ستظهر هنا</span>
+            </div>
+        </div>
+
+        <div id="panel-data" class="panel">
+            <div style="font-size: 13px; color: #4b5563; margin-bottom: 8px;">* الصق البيانات أو استورد ملف إكسيل (.xlsx) أو نصي (.txt):</div>
+            <textarea id="dataInput" placeholder="يمكنك اللصق هنا أو الضغط على زر استيراد لرفع ملف إكسيل مباشرة..."></textarea>
+            
+            <div class="actions">
+                <button class="action-btn btn-export" onclick="exportData()">تصدير (نص)</button>
+                <label class="action-btn btn-import">
+                    استيراد (ملف)
+                    <!-- السماح بملفات إكسيل والنصوص -->
+                    <input type="file" id="fileInput" accept=".txt, .xlsx, .xls, .csv">
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        
+        if (tabName === 'search') {
+            document.querySelectorAll('.tab')[0].classList.add('active');
+            document.getElementById('panel-search').classList.add('active');
+            parseData();
+        } else {
+            document.querySelectorAll('.tab')[1].classList.add('active');
+            document.getElementById('panel-data').classList.add('active');
+        }
+    }
+
+    let records = [];
+
+    function parseData() {
+        const text = document.getElementById('dataInput').value.trim();
+        const lines = text.split('\n');
+        records = [];
+        
+        lines.forEach((line, index) => {
+            if (!line.trim()) return;
+            if (line.includes("الرقم القومى") && index === 0) return;
+
+            let name = "";
+            let id = "";
+
+            let parts = line.split('\t');
+            if (parts.length >= 2) {
+                // البحث عن العمود الذي يحتوي على 14 رقم (أو أكثر قليلاً لاحتمالية وجود مسافات)
+                let idIndex = parts.findIndex(p => /\d{14}/.test(p));
+                if (idIndex !== -1) {
+                    let extractedId = parts[idIndex].match(/\d{14}/);
+                    if (extractedId) {
+                        id = extractedId[0];
+                        if (idIndex > 0) {
+                            name = parts[idIndex - 1].trim();
+                        } else if (parts.length > idIndex + 1) {
+                            name = parts[idIndex + 1].trim();
+                        }
+                    }
+                }
+            } 
+            
+            // احتياطي: التعبيرات المنطقية للبيانات الملتصقة
+            if (!name || !id) {
+                const match = line.match(/(?:\d+)?\s*([أ-يa-zA-Z\s]+?)\s*(\d{14})/);
+                if (match) {
+                    name = match[1].trim();
+                    id = match[2];
+                }
+            }
+
+            if (name && id) {
+                name = name.replace(/^\d+/, '').trim();
+                // تنظيف الاسم من أي أرقام
+                name = name.replace(/[0-9\-]/g, '').trim(); 
+                records.push({ name: name, id: id });
+            }
+        });
+    }
+
+    function searchName() {
+        const query = document.getElementById('searchInput').value.trim();
+        const resultBox = document.getElementById('resultBox');
+        
+        if (!query) {
+            resultBox.innerHTML = '<span style="color: #6b7280;">الرجاء إدخال اسم للبحث</span>';
+            return;
+        }
+        
+        if (records.length === 0) parseData();
+        
+        const matches = records.filter(r => r.name.includes(query));
+        
+        if (matches.length === 0) {
+            resultBox.innerHTML = '<span style="color: #ef4444;">لم يتم العثور على نتائج مطابقة.</span>';
+        } else if (matches.length === 1) {
+            resultBox.innerHTML = `
+                <div class="single-result">
+                    <div>الاسم: <strong>${matches[0].name}</strong></div>
+                    <span class="id-number">${matches[0].id}</span>
+                </div>
+            `;
+        } else {
+            let html = '<div class="list-result"><strong>تم العثور على عدة نتائج:</strong><br><br>';
+            matches.forEach(m => {
+                html += `
+                    <div class="list-item">
+                        <span>${m.name}</span>
+                        <span class="id-number">${m.id}</span>
+                        <div style="clear:both;"></div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            resultBox.innerHTML = html;
+        }
+    }
+
+    function exportData() {
+        const text = document.getElementById('dataInput').value;
+        if (!text.trim()) {
+            alert('لا توجد بيانات لتصديرها!');
+            return;
+        }
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'national_ids_data.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // استيراد الملفات (إكسيل أو نصوص)
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const fileExt = file.name.split('.').pop().toLowerCase();
+        const reader = new FileReader();
+
+        if (fileExt === 'xlsx' || fileExt === 'xls' || fileExt === 'csv') {
+            // قراءة كملف إكسيل
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    
+                    // تحويل الشيت إلى نصوص مفصولة بمسافة مجدولة (Tab) لتتناسب مع الكود
+                    const csvText = XLSX.utils.sheet_to_csv(worksheet, { FS: '\t' });
+                    
+                    document.getElementById('dataInput').value = csvText;
+                    parseData();
+                    alert('تم استيراد بيانات الإكسيل بنجاح!');
+                } catch (error) {
+                    alert('حدث خطأ أثناء قراءة ملف الإكسيل. تأكد من صحة الملف.');
+                    console.error(error);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        } else {
+            // قراءة كملف نصي عادي
+            reader.onload = function(e) {
+                document.getElementById('dataInput').value = e.target.result;
+                parseData();
+                alert('تم استيراد البيانات النصية بنجاح!');
+            };
+            reader.readAsText(file);
+        }
+        
+        e.target.value = '';
+    });
+</script>
+
+</body>
+</html>
