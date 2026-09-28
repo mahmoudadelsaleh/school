@@ -10,26 +10,25 @@
         * { box-sizing: border-box; }
         body, html {
             margin: 0; padding: 0;
-            height: 100%;
             width: 100%;
-            overflow: hidden;
-            /* خلفية فضية داكنة قليلاً تعطي طابعاً احترافياً */
+            /* تفعيل التمرير الطولي للصفحة بالكامل */
+            overflow-x: hidden;
+            overflow-y: auto;
             background-color: #e5e7eb;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .app-container {
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            /* تغيير من height ثابت إلى min-height للسماح بالتمرير */
+            min-height: 100vh; 
             max-width: 600px;
             margin: 0 auto;
-            /* اللون الأسود الاحترافي للحاوية الأساسية */
             background: #111827; 
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
             color: #ffffff;
         }
         .header {
-            /* تدرج لوني ذهبي */
             background: linear-gradient(135deg, #d4af37, #f3e5ab, #d4af37);
             color: #111827;
             text-align: center;
@@ -50,13 +49,13 @@
             text-align: center;
             cursor: pointer;
             font-weight: bold;
-            color: #9ca3af; /* فضي باهت */
+            color: #9ca3af; 
             transition: all 0.3s ease;
             border-bottom: 3px solid transparent;
         }
         .tab.active {
             background: #111827;
-            color: #d4af37; /* ذهبي */
+            color: #d4af37; 
             border-bottom: 3px solid #d4af37;
         }
         .content {
@@ -64,7 +63,6 @@
             display: flex;
             flex-direction: column;
             padding: 20px;
-            overflow: hidden;
         }
         .panel {
             display: none;
@@ -73,7 +71,6 @@
         }
         .panel.active { display: flex; }
         
-        /* عناصر لوحة البحث */
         input[type="text"] {
             width: 100%;
             padding: 16px;
@@ -106,7 +103,7 @@
         button.primary-btn:active { transform: scale(0.98); }
 
         .result-container {
-            flex: 1;
+            /* تم إزالة flex: 1 لكي لا يأخذ مساحة الشاشة بالكامل */
             margin-top: 20px;
             background: #1f2937;
             border: 1px solid #374151;
@@ -114,10 +111,12 @@
             display: flex;
             flex-direction: column;
             padding: 15px;
-            overflow-y: auto;
+            /* تصغير المربع وتحديد أقصى ارتفاع له */
+            min-height: 100px;
+            max-height: 350px; 
+            overflow-y: auto; /* يتيح التمرير الداخلي للنتائج إذا كانت كثيرة */
         }
         
-        /* تنسيق البطاقات (الاسم والرقم القومي) */
         .match-group {
             background: #273343;
             border-radius: 12px;
@@ -129,7 +128,7 @@
         .match-group:last-child { margin-bottom: 0; }
         
         .name-card {
-            background: #e5e7eb; /* فضي */
+            background: #e5e7eb; 
             color: #111827;
             padding: 12px 15px;
             border-radius: 8px;
@@ -139,8 +138,8 @@
             border-right: 5px solid #111827;
         }
         .id-card {
-            background: #111827; /* أسود */
-            color: #d4af37; /* ذهبي */
+            background: #111827; 
+            color: #d4af37; 
             padding: 15px;
             border-radius: 8px;
             font-size: 22px;
@@ -153,8 +152,8 @@
         }
         .copy-btn {
             width: 100%;
-            background: #374151; /* رمادي داكن */
-            color: #e5e7eb; /* فضي */
+            background: #374151; 
+            color: #e5e7eb; 
             border: 1px solid #4b5563;
             padding: 12px;
             font-size: 16px;
@@ -169,12 +168,11 @@
         }
         .copy-btn:hover { background: #4b5563; }
         .copy-btn.copied {
-            background: #10b981; /* أخضر للنجاح */
+            background: #10b981; 
             color: white;
             border-color: #059669;
         }
 
-        /* عناصر لوحة البيانات */
         textarea {
             flex: 1;
             width: 100%;
@@ -189,6 +187,7 @@
             margin-bottom: 15px;
             outline: none;
             white-space: pre;
+            min-height: 200px;
         }
         textarea:focus { border-color: #d4af37; }
         .actions { display: flex; gap: 10px; }
@@ -203,8 +202,8 @@
             font-weight: bold;
             color: #111827;
         }
-        .btn-export { background: #9ca3af; } /* فضي */
-        .btn-import { background: #d4af37; display: inline-block; } /* ذهبي */
+        .btn-export { background: #9ca3af; } 
+        .btn-import { background: #d4af37; display: inline-block; } 
         input[type="file"] { display: none; }
         
         .status-msg {
@@ -263,7 +262,6 @@
 <script>
     let records = [];
 
-    // التبديل بين التبويبات
     function switchTab(tabName) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -278,7 +276,6 @@
         }
     }
 
-    // جلب ملف بيرول.xlsx تلقائياً من نفس المستودع
     async function loadDefaultExcel() {
         try {
             const response = await fetch('بيرول.xlsx');
@@ -301,7 +298,6 @@
         }
     }
 
-    // قراءة البيانات من مربع النص
     function parseData() {
         const text = document.getElementById('dataInput').value.trim();
         const lines = text.split('\n');
@@ -338,7 +334,6 @@
             if (name && id) {
                 name = name.replace(/^\d+/, '').trim();
                 name = name.replace(/[0-9\-]/g, '').trim(); 
-                // منع التكرار التام
                 if (!records.find(r => r.id === id)) {
                     records.push({ name: name, id: id });
                 }
@@ -346,7 +341,6 @@
         });
     }
 
-    // البحث وعرض النتائج في البطاقات
     function searchName() {
         const query = document.getElementById('searchInput').value.trim();
         const resultBox = document.getElementById('resultBox');
@@ -380,7 +374,6 @@
         }
     }
 
-    // وظيفة نسخ الرقم القومي
     function copyID(text, btnId) {
         navigator.clipboard.writeText(text).then(() => {
             const btn = document.getElementById(btnId);
@@ -411,7 +404,6 @@
         URL.revokeObjectURL(url);
     }
 
-    // استيراد الملفات يدوياً
     document.getElementById('fileInput').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (!file) return;
@@ -449,7 +441,6 @@
         e.target.value = '';
     });
 
-    // تحميل ملف بيرول.xlsx تلقائياً عند فتح الصفحة
     window.addEventListener('DOMContentLoaded', loadDefaultExcel);
 
 </script>
