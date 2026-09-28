@@ -171,7 +171,7 @@
     <div class="header">البحث عن الرقم القومي</div>
     
     <div class="content">
-        <div id="fileStatusMsg" class="file-status">⏳ جاري تحميل البيانات من بيرول.xlsx...</div>
+        <div id="fileStatusMsg" class="file-status">⏳ جاري تحميل البيانات  ...</div>
         
         <div>
             <input type="text" id="searchInput" placeholder="أدخل جزء من الاسم للبحث..." onkeyup="if(event.key === 'Enter') searchName()">
@@ -206,7 +206,7 @@
                 
                 parseData();
                 
-                statusMsg.innerText = '✅ تم تحميل البيانات من ملف "بيرول.xlsx" بنجاح';
+                statusMsg.innerText = '✅ تم تحميل البيانات  بنجاح';
                 statusMsg.style.color = '#10b981'; // أخضر
             } else {
                 statusMsg.innerText = '⚠️ ملف "بيرول.xlsx" غير موجود في المسار الحالي.';
