@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>البحث عن الرقم القومي</title>
-    <!-- تضمين مكتبة SheetJS لقراءة ملفات إكسيل -->
+    <!-- مكتبة SheetJS لقراءة ملفات إكسيل -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * { box-sizing: border-box; }
@@ -13,7 +13,8 @@
             height: 100%;
             width: 100%;
             overflow: hidden;
-            background-color: #f3f4f6;
+            /* خلفية فضية داكنة قليلاً تعطي طابعاً احترافياً */
+            background-color: #e5e7eb;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .app-container {
@@ -22,40 +23,47 @@
             height: 100vh;
             max-width: 600px;
             margin: 0 auto;
-            background: #ffffff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            /* اللون الأسود الاحترافي للحاوية الأساسية */
+            background: #111827; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            color: #ffffff;
         }
         .header {
-            background: #1d4ed8;
-            color: white;
+            /* تدرج لوني ذهبي */
+            background: linear-gradient(135deg, #d4af37, #f3e5ab, #d4af37);
+            color: #111827;
             text-align: center;
-            padding: 15px;
-            font-size: 1.2rem;
-            font-weight: bold;
+            padding: 18px;
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            z-index: 10;
         }
         .tabs {
             display: flex;
-            background: #e5e7eb;
+            background: #1f2937;
         }
         .tab {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             text-align: center;
             cursor: pointer;
             font-weight: bold;
-            color: #4b5563;
-            transition: 0.3s;
+            color: #9ca3af; /* فضي باهت */
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
         }
         .tab.active {
-            background: #ffffff;
-            color: #1d4ed8;
-            border-bottom: 3px solid #1d4ed8;
+            background: #111827;
+            color: #d4af37; /* ذهبي */
+            border-bottom: 3px solid #d4af37;
         }
         .content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding: 15px;
+            padding: 20px;
             overflow: hidden;
         }
         .panel {
@@ -65,45 +73,116 @@
         }
         .panel.active { display: flex; }
         
+        /* عناصر لوحة البحث */
         input[type="text"] {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             font-size: 16px;
-            border: 2px solid #d1d5db;
-            border-radius: 8px;
-            margin-bottom: 10px;
+            background: #f3f4f6;
+            color: #111827;
+            border: 2px solid #9ca3af;
+            border-radius: 10px;
+            margin-bottom: 12px;
             outline: none;
-        }
-        input[type="text"]:focus { border-color: #1d4ed8; }
-        button.primary-btn {
-            background: #1d4ed8;
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
             font-weight: bold;
+            transition: 0.3s;
         }
+        input[type="text"]:focus { 
+            border-color: #d4af37;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+        }
+        button.primary-btn {
+            background: linear-gradient(to right, #d4af37, #b8860b);
+            color: #111827;
+            border: none;
+            padding: 16px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 900;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+        button.primary-btn:active { transform: scale(0.98); }
+
         .result-container {
             flex: 1;
-            margin-top: 15px;
-            background: #f9fafb;
-            border: 2px dashed #d1d5db;
-            border-radius: 8px;
+            margin-top: 20px;
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 12px;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
             padding: 15px;
             overflow-y: auto;
         }
         
+        /* تنسيق البطاقات (الاسم والرقم القومي) */
+        .match-group {
+            background: #273343;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid #4b5563;
+        }
+        .match-group:last-child { margin-bottom: 0; }
+        
+        .name-card {
+            background: #e5e7eb; /* فضي */
+            color: #111827;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-right: 5px solid #111827;
+        }
+        .id-card {
+            background: #111827; /* أسود */
+            color: #d4af37; /* ذهبي */
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 22px;
+            font-weight: 900;
+            text-align: center;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            border: 1px solid #d4af37;
+            box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.1);
+        }
+        .copy-btn {
+            width: 100%;
+            background: #374151; /* رمادي داكن */
+            color: #e5e7eb; /* فضي */
+            border: 1px solid #4b5563;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+        .copy-btn:hover { background: #4b5563; }
+        .copy-btn.copied {
+            background: #10b981; /* أخضر للنجاح */
+            color: white;
+            border-color: #059669;
+        }
+
+        /* عناصر لوحة البيانات */
         textarea {
             flex: 1;
             width: 100%;
-            padding: 10px;
-            border: 2px solid #d1d5db;
-            border-radius: 8px;
+            padding: 12px;
+            background: #f3f4f6;
+            color: #111827;
+            border: 2px solid #4b5563;
+            border-radius: 10px;
             resize: none;
             font-family: monospace;
             font-size: 14px;
@@ -111,31 +190,36 @@
             outline: none;
             white-space: pre;
         }
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
+        textarea:focus { border-color: #d4af37; }
+        .actions { display: flex; gap: 10px; }
         .action-btn {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             text-align: center;
             border: none;
             border-radius: 8px;
             font-size: 15px;
             cursor: pointer;
             font-weight: bold;
-            color: white;
+            color: #111827;
         }
-        .btn-export { background: #059669; }
-        .btn-import { background: #d97706; display: inline-block; }
+        .btn-export { background: #9ca3af; } /* فضي */
+        .btn-import { background: #d4af37; display: inline-block; } /* ذهبي */
         input[type="file"] { display: none; }
         
-        .single-result { text-align: center; font-size: 18px; }
-        .single-result .id-number { font-size: 24px; color: #1d4ed8; font-weight: bold; display: block; margin-top: 10px; letter-spacing: 2px;}
-        .list-result { width: 100%; }
-        .list-item { padding: 10px; border-bottom: 1px solid #e5e7eb; }
-        .list-item:last-child { border-bottom: none; }
-        .list-item .id-number { color: #1d4ed8; font-weight: bold; float: left; }
+        .status-msg {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 16px;
+            margin: auto 0;
+        }
+        .file-status {
+            font-size: 12px;
+            color: #10b981;
+            text-align: center;
+            margin-bottom: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -145,27 +229,30 @@
     
     <div class="tabs">
         <div class="tab active" onclick="switchTab('search')">البحث</div>
-        <div class="tab" onclick="switchTab('data')">البيانات (إكسيل)</div>
+        <div class="tab" onclick="switchTab('data')">البيانات / الإعدادات</div>
     </div>
     
     <div class="content">
+        <div id="fileStatusMsg" class="file-status">✅ تم تحميل بيانات "بيرول.xlsx" تلقائياً</div>
+        
         <div id="panel-search" class="panel active">
             <input type="text" id="searchInput" placeholder="أدخل جزء من الاسم للبحث..." onkeyup="if(event.key === 'Enter') searchName()">
-            <button class="primary-btn" onclick="searchName()">بحث</button>
+            <button class="primary-btn" onclick="searchName()">بحث سريع</button>
             <div class="result-container" id="resultBox">
-                <span style="color: #6b7280;">النتيجة ستظهر هنا</span>
+                <div class="status-msg">أدخل الاسم واضغط بحث...</div>
             </div>
         </div>
 
         <div id="panel-data" class="panel">
-            <div style="font-size: 13px; color: #4b5563; margin-bottom: 8px;">* الصق البيانات أو استورد ملف إكسيل (.xlsx) أو نصي (.txt):</div>
-            <textarea id="dataInput" placeholder="يمكنك اللصق هنا أو الضغط على زر استيراد لرفع ملف إكسيل مباشرة..."></textarea>
+            <div style="font-size: 13px; color: #9ca3af; margin-bottom: 8px;">
+                البيانات المحملة (يمكنك لصق بيانات إضافية أو استيراد ملف):
+            </div>
+            <textarea id="dataInput" placeholder="جاري محاولة تحميل بيرول.xlsx تلقائياً... أو يمكنك اللصق هنا."></textarea>
             
             <div class="actions">
                 <button class="action-btn btn-export" onclick="exportData()">تصدير (نص)</button>
                 <label class="action-btn btn-import">
                     استيراد (ملف)
-                    <!-- السماح بملفات إكسيل والنصوص -->
                     <input type="file" id="fileInput" accept=".txt, .xlsx, .xls, .csv">
                 </label>
             </div>
@@ -174,6 +261,9 @@
 </div>
 
 <script>
+    let records = [];
+
+    // التبديل بين التبويبات
     function switchTab(tabName) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -188,8 +278,30 @@
         }
     }
 
-    let records = [];
+    // جلب ملف بيرول.xlsx تلقائياً من نفس المستودع
+    async function loadDefaultExcel() {
+        try {
+            const response = await fetch('بيرول.xlsx');
+            if (response.ok) {
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                const firstSheet = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheet];
+                
+                const csvText = XLSX.utils.sheet_to_csv(worksheet, { FS: '\t' });
+                document.getElementById('dataInput').value = csvText;
+                
+                parseData();
+                document.getElementById('fileStatusMsg').style.display = 'block';
+            } else {
+                console.log('ملف بيرول.xlsx غير موجود في المسار الحالي.');
+            }
+        } catch (error) {
+            console.error('تعذر جلب ملف بيرول.xlsx:', error);
+        }
+    }
 
+    // قراءة البيانات من مربع النص
     function parseData() {
         const text = document.getElementById('dataInput').value.trim();
         const lines = text.split('\n');
@@ -204,22 +316,17 @@
 
             let parts = line.split('\t');
             if (parts.length >= 2) {
-                // البحث عن العمود الذي يحتوي على 14 رقم (أو أكثر قليلاً لاحتمالية وجود مسافات)
                 let idIndex = parts.findIndex(p => /\d{14}/.test(p));
                 if (idIndex !== -1) {
                     let extractedId = parts[idIndex].match(/\d{14}/);
                     if (extractedId) {
                         id = extractedId[0];
-                        if (idIndex > 0) {
-                            name = parts[idIndex - 1].trim();
-                        } else if (parts.length > idIndex + 1) {
-                            name = parts[idIndex + 1].trim();
-                        }
+                        if (idIndex > 0) name = parts[idIndex - 1].trim();
+                        else if (parts.length > idIndex + 1) name = parts[idIndex + 1].trim();
                     }
                 }
             } 
             
-            // احتياطي: التعبيرات المنطقية للبيانات الملتصقة
             if (!name || !id) {
                 const match = line.match(/(?:\d+)?\s*([أ-يa-zA-Z\s]+?)\s*(\d{14})/);
                 if (match) {
@@ -230,19 +337,22 @@
 
             if (name && id) {
                 name = name.replace(/^\d+/, '').trim();
-                // تنظيف الاسم من أي أرقام
                 name = name.replace(/[0-9\-]/g, '').trim(); 
-                records.push({ name: name, id: id });
+                // منع التكرار التام
+                if (!records.find(r => r.id === id)) {
+                    records.push({ name: name, id: id });
+                }
             }
         });
     }
 
+    // البحث وعرض النتائج في البطاقات
     function searchName() {
         const query = document.getElementById('searchInput').value.trim();
         const resultBox = document.getElementById('resultBox');
         
         if (!query) {
-            resultBox.innerHTML = '<span style="color: #6b7280;">الرجاء إدخال اسم للبحث</span>';
+            resultBox.innerHTML = '<div class="status-msg">الرجاء إدخال اسم للبحث</div>';
             return;
         }
         
@@ -251,28 +361,39 @@
         const matches = records.filter(r => r.name.includes(query));
         
         if (matches.length === 0) {
-            resultBox.innerHTML = '<span style="color: #ef4444;">لم يتم العثور على نتائج مطابقة.</span>';
-        } else if (matches.length === 1) {
-            resultBox.innerHTML = `
-                <div class="single-result">
-                    <div>الاسم: <strong>${matches[0].name}</strong></div>
-                    <span class="id-number">${matches[0].id}</span>
-                </div>
-            `;
+            resultBox.innerHTML = '<div class="status-msg" style="color: #ef4444;">لم يتم العثور على نتائج.</div>';
         } else {
-            let html = '<div class="list-result"><strong>تم العثور على عدة نتائج:</strong><br><br>';
-            matches.forEach(m => {
+            let html = '';
+            matches.forEach((m, i) => {
                 html += `
-                    <div class="list-item">
-                        <span>${m.name}</span>
-                        <span class="id-number">${m.id}</span>
-                        <div style="clear:both;"></div>
+                    <div class="match-group">
+                        <div class="name-card">👤 ${m.name}</div>
+                        <div class="id-card" id="id-val-${i}">${m.id}</div>
+                        <button class="copy-btn" id="copy-btn-${i}" onclick="copyID('${m.id}', 'copy-btn-${i}')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            نسخ الرقم القومي
+                        </button>
                     </div>
                 `;
             });
-            html += '</div>';
             resultBox.innerHTML = html;
         }
+    }
+
+    // وظيفة نسخ الرقم القومي
+    function copyID(text, btnId) {
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById(btnId);
+            const originalHtml = btn.innerHTML;
+            btn.classList.add('copied');
+            btn.innerHTML = '✅ تم النسخ بنجاح!';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = originalHtml;
+            }, 2000);
+        }).catch(err => {
+            alert("حدث خطأ أثناء النسخ");
+        });
     }
 
     function exportData() {
@@ -290,7 +411,7 @@
         URL.revokeObjectURL(url);
     }
 
-    // استيراد الملفات (إكسيل أو نصوص)
+    // استيراد الملفات يدوياً
     document.getElementById('fileInput').addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (!file) return;
@@ -299,38 +420,38 @@
         const reader = new FileReader();
 
         if (fileExt === 'xlsx' || fileExt === 'xls' || fileExt === 'csv') {
-            // قراءة كملف إكسيل
             reader.onload = function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, {type: 'array'});
                     const firstSheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[firstSheetName];
-                    
-                    // تحويل الشيت إلى نصوص مفصولة بمسافة مجدولة (Tab) لتتناسب مع الكود
                     const csvText = XLSX.utils.sheet_to_csv(worksheet, { FS: '\t' });
                     
                     document.getElementById('dataInput').value = csvText;
                     parseData();
-                    alert('تم استيراد بيانات الإكسيل بنجاح!');
+                    document.getElementById('fileStatusMsg').style.display = 'block';
+                    document.getElementById('fileStatusMsg').innerText = '✅ تم استيراد الملف بنجاح!';
                 } catch (error) {
-                    alert('حدث خطأ أثناء قراءة ملف الإكسيل. تأكد من صحة الملف.');
-                    console.error(error);
+                    alert('حدث خطأ أثناء قراءة ملف الإكسيل.');
                 }
             };
             reader.readAsArrayBuffer(file);
         } else {
-            // قراءة كملف نصي عادي
             reader.onload = function(e) {
                 document.getElementById('dataInput').value = e.target.result;
                 parseData();
-                alert('تم استيراد البيانات النصية بنجاح!');
+                document.getElementById('fileStatusMsg').style.display = 'block';
+                document.getElementById('fileStatusMsg').innerText = '✅ تم استيراد النص بنجاح!';
             };
             reader.readAsText(file);
         }
-        
         e.target.value = '';
     });
+
+    // تحميل ملف بيرول.xlsx تلقائياً عند فتح الصفحة
+    window.addEventListener('DOMContentLoaded', loadDefaultExcel);
+
 </script>
 
 </body>
