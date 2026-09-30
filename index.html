@@ -51,12 +51,65 @@
             font-weight: 800;
         }
 
+        /* شريط الأخبار المتحرك */
+        .news-ticker-container {
+            background: #1a1917;
+            border-bottom: 1px solid var(--gold-primary);
+            border-top: 1px solid #333;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            height: 42px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+        .news-ticker-title {
+            background: var(--gold-gradient);
+            color: #111;
+            font-weight: 800;
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            z-index: 2;
+            white-space: nowrap;
+            font-size: 0.95em;
+            box-shadow: -3px 0 8px rgba(0,0,0,0.3);
+        }
+        .news-ticker-wrapper {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            white-space: nowrap;
+        }
+        .news-ticker-text {
+            display: inline-block;
+            white-space: nowrap;
+            padding-right: 100%;
+            color: #f1f1f1;
+            font-size: 1em;
+            font-weight: 500;
+            /* حركة النص من اليسار إلى اليمين */
+            animation: ticker-left-to-right 25s linear infinite;
+        }
+        .news-ticker-wrapper:hover .news-ticker-text {
+            animation-play-state: paused; /* إيقاف الحركة عند تحريك الماوس للتحقق */
+        }
+
+        @keyframes ticker-left-to-right {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #1c1a17 0%, #2c2821 100%);
             color: white;
             text-align: center;
-            padding: 70px 20px 90px;
+            padding: 60px 20px 80px;
             border-bottom: 3px solid var(--gold-primary);
             position: relative;
         }
@@ -80,51 +133,39 @@
             margin: 0 auto;
         }
 
-        /* Director Section */
+        /* Services & Links Section */
         .section-card {
             background: #ffffff;
-            padding: 35px;
+            padding: 30px;
             border-radius: 16px;
             border: 1px solid #e0d0b0;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            margin: -40px auto 30px;
+            margin: -35px auto 30px;
             position: relative;
             z-index: 10;
         }
-        .section-title {
-            color: var(--dark-gold);
-            border-right: 5px solid var(--gold-primary);
-            padding-right: 15px;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-        }
-        .director-p {
-            line-height: 1.9;
-            text-align: justify;
-            color: #444;
-        }
 
-        /* روابط الخدمات الأكاديمية والنتائج */
         .result-link-wrapper {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
+            justify-content: center;
         }
         .btn-gold-link {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             background: var(--gold-gradient);
             color: #111;
             text-decoration: none;
             font-weight: 700;
-            font-size: 1em;
-            padding: 12px 20px;
+            font-size: 1.05em;
+            padding: 14px 24px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(170, 124, 17, 0.2);
             transition: all 0.3s ease;
+            flex: 1;
+            min-width: 220px;
         }
         .btn-gold-link:hover {
             transform: translateY(-2px);
@@ -293,6 +334,7 @@
         @media (max-width: 600px) {
             .hero h1 { font-size: 1.8em; }
             .platform-links { flex-direction: column; }
+            .btn-gold-link { width: 100%; }
         }
     </style>
 </head>
@@ -304,6 +346,15 @@
         </div>
     </nav>
 
+    <!-- شريط الأخبار المتحرك (من اليسار إلى اليمين) -->
+    <div class="news-ticker-container">
+        <div class="news-ticker-title">📢 تنبيهات هامّة</div>
+        <div class="news-ticker-wrapper">
+            <!-- يمكنك تغيير هذا النص مباشرة من هنا بسهولة -->
+            <div class="news-ticker-text">####### &nbsp;&nbsp;&nbsp;&nbsp; ####### &nbsp;&nbsp;&nbsp;&nbsp; ####### &nbsp;&nbsp;&nbsp;&nbsp; #######</div>
+        </div>
+    </div>
+
     <header class="hero">
         <div class="container">
             <h1>مدرسة الخدمة الثانوية العامة المشتركة</h1>
@@ -312,14 +363,8 @@
     </header>
 
     <div class="container">
+        <!-- قسم الخدمات وروابط الاستعلام (بدون كلمة المدير) -->
         <section class="section-card">
-            <h2 class="section-title">كلمة المدير</h2>
-            <div class="director-p">
-                <p><strong>أبنائي الطلاب، زملائي المعلمون..</strong></p>
-                <p>نسعى دائماً لتوفير كافة السبل التي تضمن لكم تجربة تعليمية رائدة. إن التحول الرقمي في مدرسة الخدمة ليس مجرد شعار، بل هو واقع نعيشه لتسهيل الوصول للمعلومات والنتائج بكل دقة وشفافية.</p>
-                <p style="text-align: left; margin-top: 15px;"><strong>المدير / رجب عبد العزيز سالم</strong></p>
-            </div>
-
             <div class="result-link-wrapper">
                 <a href="result.html" class="btn-gold-link">
                     <span>📑 استعلام عن نتيجة الامتحانات</span>
@@ -330,6 +375,7 @@
             </div>
         </section>
 
+        <!-- صندوق الاستعلام عن منصة كوريو -->
         <div class="inquiry-container">
             <div class="inquiry-box">
                 <h2>منصة كوريو (AI)</h2>
