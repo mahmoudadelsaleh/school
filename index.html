@@ -92,7 +92,7 @@
             animation: ticker-left-to-right 25s linear infinite;
         }
         .news-ticker-wrapper:hover .news-ticker-text {
-            animation-play-state: paused; /* إيقاف الحركة عند تحريك الماوس للتحقق */
+            animation-play-state: paused;
         }
 
         @keyframes ticker-left-to-right {
@@ -350,7 +350,6 @@
     <div class="news-ticker-container">
         <div class="news-ticker-title">📢 تنبيهات هامّة</div>
         <div class="news-ticker-wrapper">
-            <!-- يمكنك تغيير هذا النص مباشرة من هنا بسهولة -->
             <div class="news-ticker-text">####### &nbsp;&nbsp;&nbsp;&nbsp; ####### &nbsp;&nbsp;&nbsp;&nbsp; ####### &nbsp;&nbsp;&nbsp;&nbsp; #######</div>
         </div>
     </div>
@@ -363,12 +362,30 @@
     </header>
 
     <div class="container">
-        <!-- قسم الخدمات وروابط الاستعلام (بدون كلمة المدير) -->
+        <!-- قسم الخدمات وروابط المنصات -->
         <section class="section-card">
             <div class="result-link-wrapper">
+                
+                <!-- ========================================================================= -->
+                <!-- 💡 تلميح برمجي (DEVELOPER HINT) - استرجاع رابط النتيجة:                    -->
+                <!-- لتمكين زر الاستعلام عن النتيجة/الشهادة مجدداً:                                -->
+                <!-- 1. أزل علامات التعليق البرمجي <!-- و --> من حول العنصر أدناه.                  -->
+                <!-- 2. الملف المخصص للنتائج هو: result.html (موجود بنفس المستودع).             -->
+                <!-- 3. تأكد من تحديث قاعدة بيانات النتائج داخل ملف result.html عند ظهور النتيجة. -->
+                <!-- ========================================================================= -->
+                
+                <!-- 
                 <a href="result.html" class="btn-gold-link">
                     <span>📑 استعلام عن نتيجة الامتحانات</span>
                 </a>
+                -->
+
+                <!-- رابط منصة كوريو الأساسي -->
+                <a href="https://me-portal.qureo.education" target="_blank" class="btn-gold-link">
+                    <span>🤖 منصة كوريو (Qureo)</span>
+                </a>
+
+                <!-- رابط منصة الثقافة المالية -->
                 <a href="https://egy.app.spx-learning-square.com/login" target="_blank" class="btn-gold-link" style="background: var(--silver-gradient); color: #222;">
                     <span>💳 منصة الثقافة المالية</span>
                 </a>
@@ -380,8 +397,9 @@
             <div class="inquiry-box">
                 <h2>منصة كوريو (AI)</h2>
                 <p style="color: #666; font-size: 0.95em;">أدخل الرقم القومي الخاص بك للحصول على بيانات الدخول</p>
+                <p style="color: #888; font-size: 0.85em; margin-top: -8px;">(لتجربة الموقع يمكنك استخدام الرقم القومي: <b style="color:var(--gold-dark)">123456789101112</b>)</p>
                 
-                <input type="text" id="nationalId" placeholder="أدخل الـ 14 رقم..." maxlength="14">
+                <input type="text" id="nationalId" placeholder="أدخل الـ 14 رقم..." maxlength="15">
                 <button class="btn-search" onclick="fetchQureoData()">استعلام الآن</button>
 
                 <div id="q-display">
@@ -427,7 +445,16 @@
     </footer>
 
     <script>
-        // دالة الاستعلام من ملف data.json المحلي
+        // الطالب الافتراضي لتجربة الموقع
+        const defaultStudent = {
+            "الرقم القومي": "123456789101112",
+            "الاسم": "طالب افتراضي",
+            "اسم المستخدم": "123456",
+            "كلمة المرور": "123456",
+            "رابط منصة ": "https://me-portal.qureo.education"
+        };
+
+        // دالة الاستعلام
         async function fetchQureoData() {
             const idInput = document.getElementById('nationalId').value.trim();
             const display = document.getElementById('q-display');
@@ -436,11 +463,18 @@
             display.style.display = "none";
             error.innerText = "";
 
-            if (idInput.length !== 14 || isNaN(idInput)) {
-                error.innerText = "يرجى إدخال رقم قومي صحيح مكون من 14 رقمًا.";
+            if (!idInput) {
+                error.innerText = "يرجى إدخال الرقم القومي.";
                 return;
             }
 
+            // 1. التحقق أولاً إذا كان مدخلاً هو طالب التجربة الافتراضي
+            if (idInput === defaultStudent["الرقم القومي"]) {
+                renderStudentData(defaultStudent);
+                return;
+            }
+
+            // 2. إذا لم يكن طالب التجربة، يتم البحث داخل ملف data.json
             try {
                 const response = await fetch('data.json');
                 
@@ -452,14 +486,7 @@
                 const student = students.find(s => String(s["الرقم القومي"]).trim() === idInput);
 
                 if (student) {
-                    document.getElementById('s-name').innerText = student["الاسم"] || "غير متاح";
-                    document.getElementById('s-user').innerText = student["اسم المستخدم"] || "غير متاح";
-                    document.getElementById('s-pass').innerText = student["كلمة المرور"] || "غير متاح";
-                    
-                    const qureoUrl = student["رابط منصة "] || student["رابط منصة"] || "https://me-portal.qureo.education";
-                    document.getElementById('s-link').href = qureoUrl;
-                    
-                    display.style.display = "block";
+                    renderStudentData(student);
                 } else {
                     error.innerText = "عفواً، الرقم القومي غير مسجل لدينا.";
                 }
@@ -467,6 +494,18 @@
                 error.innerText = "حدث خطأ أثناء قراءة ملف البيانات (data.json).";
                 console.error("Error fetching JSON:", err);
             }
+        }
+
+        // دالة عرض بيانات الطالب
+        function renderStudentData(student) {
+            document.getElementById('s-name').innerText = student["الاسم"] || "غير متاح";
+            document.getElementById('s-user').innerText = student["اسم المستخدم"] || student["كود الطالب"] || "غير متاح";
+            document.getElementById('s-pass').innerText = student["كلمة المرور"] || "غير متاح";
+            
+            const qureoUrl = student["رابط منصة "] || student["رابط منصة"] || "https://me-portal.qureo.education";
+            document.getElementById('s-link').href = qureoUrl;
+            
+            document.getElementById('q-display').style.display = "block";
         }
 
         // دالة النسخ مع تغيير نص الزر مؤقتًا
