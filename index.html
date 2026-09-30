@@ -4,50 +4,269 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مدرسة الخدمة الثانوية العامة المشتركة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #007bff; --secondary: #ffc107; --dark: #343a40; --light: #f8f9fa; }
-        body { font-family: 'Tajawal', sans-serif; margin: 0; padding: 0; background-color: var(--light); color: var(--dark); text-align: right; }
+        :root {
+            /* التدرجات والألوان الذهبية والفضية */
+            --gold-primary: #d4af37;
+            --gold-dark: #aa7c11;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa7c11 100%);
+            --silver-gradient: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 50%, #4a4a4a 100%);
+            --silver-bg: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            --dark-gold: #1a1810;
+            --dark-card: #23221e;
+            --light: #fafafa;
+            --text-color: #2b2b2b;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f5f7;
+            color: var(--text-color);
+            text-align: right;
+            line-height: 1.6;
+        }
 
         /* Navbar */
-        .navbar { background-color: var(--primary); color: white; padding: 15px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .navbar-container { width: 90%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo a { color: white; text-decoration: none; font-size: 1.4em; font-weight: 700; }
+        .navbar {
+            background: #111111;
+            border-bottom: 2px solid var(--gold-primary);
+            padding: 15px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .navbar-container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo a {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            font-size: 1.5em;
+            font-weight: 800;
+        }
 
         /* Hero Section */
-        .hero { background: linear-gradient(45deg, #007bff, #0056b3); color: white; text-align: center; padding: 60px 20px; }
-        .hero h1 { margin: 0; font-size: 2.2em; }
-        .hero p { font-size: 1.1em; opacity: 0.9; margin-top: 10px; }
+        .hero {
+            background: linear-gradient(135deg, #1c1a17 0%, #2c2821 100%);
+            color: white;
+            text-align: center;
+            padding: 70px 20px 90px;
+            border-bottom: 3px solid var(--gold-primary);
+            position: relative;
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: 2.5em;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        .hero p {
+            font-size: 1.2em;
+            color: #d1d1d1;
+            margin-top: 10px;
+        }
 
-        .container { width: 90%; max-width: 1000px; margin: 0 auto; }
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
 
         /* Director Section */
-        .section-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin: -30px auto 30px; position: relative; z-index: 10; }
-        .section-title { color: var(--primary); border-right: 5px solid var(--secondary); padding-right: 15px; margin-bottom: 20px; }
-        .director-p { line-height: 1.8; text-align: justify; color: #555; }
+        .section-card {
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 16px;
+            border: 1px solid #e0d0b0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin: -40px auto 30px;
+            position: relative;
+            z-index: 10;
+        }
+        .section-title {
+            color: var(--dark-gold);
+            border-right: 5px solid var(--gold-primary);
+            padding-right: 15px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .director-p {
+            line-height: 1.9;
+            text-align: justify;
+            color: #444;
+        }
 
-        /* رابط النتيجة المستقلة */
-        .result-link-wrapper { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; }
-        .btn-result-link { display: inline-flex; align-items: center; color: #28a745; text-decoration: none; font-weight: 700; font-size: 1.1em; transition: 0.3s; }
-        .btn-result-link:hover { color: #1e7e34; transform: scale(1.02); }
+        /* روابط الخدمات الأكاديمية والنتائج */
+        .result-link-wrapper {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn-gold-link {
+            display: inline-flex;
+            align-items: center;
+            background: var(--gold-gradient);
+            color: #111;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1em;
+            padding: 12px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(170, 124, 17, 0.2);
+            transition: all 0.3s ease;
+        }
+        .btn-gold-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(170, 124, 17, 0.4);
+        }
 
-        /* Qureo Inquiry Box */
-        .inquiry-container { background: #e9ecef; padding: 40px 0; margin-top: 20px; border-radius: 20px; }
-        .inquiry-box { background: white; padding: 30px; border-radius: 12px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
-        .inquiry-box h2 { color: var(--primary); margin-top:0; }
-        .inquiry-box input { width: 100%; padding: 12px; margin: 15px 0; border: 2px solid #ddd; border-radius: 8px; font-size: 1em; text-align: center; box-sizing: border-box; }
-        .btn-search { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: 700; width: 100%; font-size: 1.1em; }
+        /* Inquiry Box */
+        .inquiry-container {
+            background: linear-gradient(180deg, #1f1e1c 0%, #111111 100%);
+            padding: 45px 20px;
+            margin-top: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--gold-primary);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        .inquiry-box {
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 16px;
+            max-width: 520px;
+            margin: 0 auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            text-align: center;
+            border: 2px solid #f0e6d2;
+        }
+        .inquiry-box h2 {
+            color: #111;
+            margin-top: 0;
+            font-weight: 800;
+        }
+        .inquiry-box input {
+            width: 100%;
+            padding: 14px;
+            margin: 20px 0 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            text-align: center;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+        .inquiry-box input:focus {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-search {
+            background: var(--gold-gradient);
+            color: #111;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 800;
+            width: 100%;
+            font-size: 1.1em;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .btn-search:hover {
+            filter: brightness(1.05);
+            transform: translateY(-2px);
+        }
 
         /* Results Area */
-        #q-display { margin-top: 20px; display: none; text-align: right; animation: fadeIn 0.5s; }
-        .data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .data-table td { padding: 10px; border-bottom: 1px solid #eee; }
-        .label { font-weight: 700; color: var(--primary); width: 40%; }
+        #q-display {
+            margin-top: 25px;
+            display: none;
+            text-align: right;
+            animation: fadeIn 0.5s ease-in-out;
+            background: #faf8f5;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #ebd299;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #e2d9c8;
+        }
+        .label {
+            font-weight: 700;
+            color: var(--dark-gold);
+            width: 35%;
+        }
 
-        .footer { background: var(--dark); color: white; padding: 30px 0; text-align: center; margin-top: 50px; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .platform-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .btn-platform {
+            flex: 1;
+            min-width: 140px;
+            text-align: center;
+            padding: 10px 12px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: 0.3s;
+        }
+        .btn-qureo {
+            background: #28a745;
+            color: white;
+        }
+        .btn-qureo:hover { background: #218838; }
 
-        @media (max-width: 600px) { .hero h1 { font-size: 1.6em; } }
+        .btn-finance {
+            background: #17a2b8;
+            color: white;
+        }
+        .btn-finance:hover { background: #138496; }
+
+        /* Footer */
+        .footer {
+            background: #0d0d0d;
+            color: #b5b5b5;
+            padding: 35px 0;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 1px solid #333;
+        }
+        .footer p { margin: 5px 0; }
+        .footer .designer { color: var(--gold-primary); font-weight: bold; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.8em; }
+            .platform-links { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
@@ -71,12 +290,15 @@
             <div class="director-p">
                 <p><strong>أبنائي الطلاب، زملائي المعلمون..</strong></p>
                 <p>نسعى دائماً لتوفير كافة السبل التي تضمن لكم تجربة تعليمية رائدة. إن التحول الرقمي في مدرسة الخدمة ليس مجرد شعار، بل هو واقع نعيشه لتسهيل الوصول للمعلومات والنتائج بكل دقة وشفافية.</p>
-                <strong>المدير / رجب عبد العزيز سالم</strong>
+                <p style="text-align: left; margin-top: 15px;"><strong>المدير / رجب عبد العزيز سالم</strong></p>
             </div>
 
             <div class="result-link-wrapper">
-                <a href="result.html" class="btn-result-link">
-                    <span>📑 استعلام عن نتيجة الامتحانات (اضغط هنا للذهاب لصفحة النتيجة)</span>
+                <a href="result.html" class="btn-gold-link">
+                    <span>📑 استعلام عن نتيجة الامتحانات</span>
+                </a>
+                <a href="https://egy.app.spx-learning-square.com/login" target="_blank" class="btn-gold-link" style="background: linear-gradient(135deg, #e0e0e0 0%, #ffffff 50%, #b0b0b0 100%); color: #222;">
+                    <span>💳 منصة الثقافة المالية</span>
                 </a>
             </div>
         </section>
@@ -84,7 +306,8 @@
         <div class="inquiry-container">
             <div class="inquiry-box">
                 <h2>منصة كوريو (AI)</h2>
-                <p>أدخل الرقم القومي الخاص بك للحصول على بيانات الدخول</p>
+                <p style="color: #666; font-size: 0.95em;">أدخل الرقم القومي الخاص بك للحصول على بيانات الدخول</p>
+                
                 <input type="text" id="nationalId" placeholder="أدخل الـ 14 رقم..." maxlength="14">
                 <button class="btn-search" onclick="fetchQureoData()">استعلام الآن</button>
 
@@ -92,42 +315,28 @@
                     <table class="data-table">
                         <tr><td class="label">الاسم:</td><td id="s-name"></td></tr>
                         <tr><td class="label">اسم المستخدم:</td><td id="s-user"></td></tr>
-                        <tr><td class="label">كلمة المرور:</td><td id="s-pass" style="color:red; font-weight:bold;"></td></tr>
+                        <tr><td class="label">كلمة المرور:</td><td id="s-pass" style="color:#d9534f; font-weight:bold;"></td></tr>
                     </table>
-                    <div style="margin-top:15px;">
-                        <a id="s-link" href="#" target="_blank" style="background:#28a745; color:white; padding:8px 15px; text-decoration:none; border-radius:5px; display:inline-block;">فتح المنصة مباشرة</a>
+                    
+                    <div class="platform-links">
+                        <a id="s-link" href="#" target="_blank" class="btn-platform btn-qureo">دخول كوريو</a>
+                        <a href="https://egy.app.spx-learning-square.com/login" target="_blank" class="btn-platform btn-finance">دخول الثقافة المالية</a>
                     </div>
                 </div>
-                <div id="q-error" style="color:red; margin-top:10px; font-weight:bold;"></div>
+                
+                <div id="q-error" style="color:#d9534f; margin-top:15px; font-weight:bold;"></div>
             </div>
         </div>
     </div>
 
     <footer class="footer">
         <p>حقوق النشر © 2026 - مدرسة الخدمة الثانوية</p>
-        <p>تطوير الأستاذ: محمود عادل</p>
+        <p>تطوير الأستاذ: <span class="designer">محمود عادل</span></p>
     </footer>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-        // إعدادات Firebase الخاصة بك
-        const firebaseConfig = {
-          apiKey: "AIzaSyAxyKaH34L-IDFOA4j4YMHAFfuYKaA-BjQ",
-          authDomain: "khedma-sec.firebaseapp.com",
-          projectId: "khedma-sec",
-          storageBucket: "khedma-sec.firebasestorage.app",
-          messagingSenderId: "671564737679",
-          appId: "1:671564737679:web:212314283f72968ecad4fa",
-          measurementId: "G-LHB4Y87ZT6"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // دالة جلب البيانات من منصة كوريو (Realtime Database)
-        window.fetchQureoData = async function() {
+    <script>
+        // دالة الاستعلام من ملف data.json المحلي
+        async function fetchQureoData() {
             const idInput = document.getElementById('nationalId').value.trim();
             const display = document.getElementById('q-display');
             const error = document.getElementById('q-error');
@@ -135,37 +344,40 @@
             display.style.display = "none";
             error.innerText = "";
 
-            if (idInput.length !== 14) {
-                error.innerText = "يجب إدخال 14 رقم صحيح.";
+            if (idInput.length !== 14 || isNaN(idInput)) {
+                error.innerText = "يرجى إدخال رقم قومی صحيح مكون من 14 رقمًا.";
                 return;
             }
 
             try {
-                // الكود بيبحث في 'students' داخل الداتابيز
-                const dbRef = ref(db);
-                const snapshot = await get(child(dbRef, 'students'));
+                // جلب البيانات من ملف data.json الموجود في نفس المجلد
+                const response = await fetch('data.json');
                 
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    // البحث في قائمة الجيسون
-                    const student = data.find(s => String(s["الرقم القومي"]) === idInput);
+                if (!response.ok) {
+                    throw new Error("لم يتم العثور على ملف data.json");
+                }
 
-                    if (student) {
-                        document.getElementById('s-name').innerText = student["الاسم"];
-                        document.getElementById('s-user').innerText = student["اسم المستخدم"];
-                        document.getElementById('s-pass').innerText = student["كلمة المرور"];
-                        // استخدام "رابط منصة " بالمسافة كما في الجيسون الخاص بك
-                        document.getElementById('s-link').href = student["رابط منصة "] || "https://me-portal.qureo.education";
-                        display.style.display = "block";
-                    } else {
-                        error.innerText = "عفواً، الرقم القومي غير موجود.";
-                    }
+                const students = await response.json();
+                
+                // البحث بالرقم القومي داخل المصفوفة
+                const student = students.find(s => String(s["الرقم القومي"]).trim() === idInput);
+
+                if (student) {
+                    document.getElementById('s-name').innerText = student["الاسم"] || "غير متاح";
+                    document.getElementById('s-user').innerText = student["اسم المستخدم"] || "غير متاح";
+                    document.getElementById('s-pass').innerText = student["كلمة المرور"] || "غير متاح";
+                    
+                    // استخدام رابط المنصة الموجود في الـ JSON أو الرابط الافتراضي
+                    const qureoUrl = student["رابط منصة "] || student["رابط منصة"] || "https://me-portal.qureo.education";
+                    document.getElementById('s-link').href = qureoUrl;
+                    
+                    display.style.display = "block";
                 } else {
-                    error.innerText = "قاعدة البيانات فارغة.";
+                    error.innerText = "عفواً، الرقم القومي غير مسجل لدينا.";
                 }
             } catch (err) {
-                error.innerText = "خطأ في جلب البيانات من فاير بيز.";
-                console.error(err);
+                error.innerText = "حدث خطأ أثناء قراءة ملف البيانات (data.json).";
+                console.error("Error fetching JSON:", err);
             }
         }
     </script>
