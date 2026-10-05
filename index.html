@@ -55,9 +55,9 @@ body{font-family:'Tajawal',sans-serif;margin:0;padding:0;background:#f4f5f7;colo
 
 <nav class="navbar"><div class="navbar-container"><div class="logo"><a href="#">مدرسة الخدمة الثانوية</a></div></div></nav>
 
-<div class="news-ticker-container">
+<div class="news-ticker-container" id="ticker" style="display:none">
 <div class="news-ticker-title">📢 تنبيهات هامّة</div>
-<div class="news-ticker-wrapper"><div class="news-ticker-text">####### &nbsp;&nbsp;&nbsp;&nbsp; ####### &nbsp;&nbsp;&nbsp;&nbsp; ####### &nbsp;&nbsp;&nbsp;&nbsp; #######</div></div>
+<div class="news-ticker-wrapper"><div class="news-ticker-text" id="ticker-text"></div></div>
 </div>
 
 <header class="hero"><div class="container">
@@ -206,6 +206,25 @@ function copyText(elementId, btnElement) {
         }, 2000);
     }).catch(err => console.error('فشل النسخ: ', err));
 }
+
+
+// شريط الإعلانات: كل سطر في ads.txt يظهر كإعلان في الشريط
+async function loadAds() {
+    try {
+        const res = await fetch('ads.txt?v=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) return;
+        const text = (await res.text()).replace(/^\uFEFF/, '');
+        const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        if (!lines.length) return;
+        const box = document.getElementById('ticker-text');
+        box.textContent = lines.join('   ✦   ');
+        box.style.animationDuration = Math.max(15, Math.round(box.textContent.length / 5)) + 's';
+        document.getElementById('ticker').style.display = 'flex';
+    } catch (e) {
+        console.error('تعذر قراءة ads.txt', e);
+    }
+}
+loadAds();
 
 document.getElementById('nationalId').addEventListener('keydown', e => {
     if (e.key === 'Enter') fetchQureoData();
