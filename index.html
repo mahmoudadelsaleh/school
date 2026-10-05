@@ -1,550 +1,215 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مدرسة الخدمة الثانوية العامة المشتركة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            /* التدرجات والألوان الذهبية والفضية */
-            --gold-primary: #d4af37;
-            --gold-dark: #aa7c11;
-            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa7c11 100%);
-            --silver-gradient: linear-gradient(135deg, #e0e0e0 0%, #ffffff 50%, #b0b0b0 100%);
-            --dark-gold: #1a1810;
-            --light: #fafafa;
-            --text-color: #2b2b2b;
-        }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f4f5f7;
-            color: var(--text-color);
-            text-align: right;
-            line-height: 1.6;
-        }
-
-        /* Navbar */
-        .navbar {
-            background: #111111;
-            border-bottom: 2px solid var(--gold-primary);
-            padding: 15px 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .navbar-container {
-            width: 90%;
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo a {
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
-            font-size: 1.5em;
-            font-weight: 800;
-        }
-
-        /* شريط الأخبار المتحرك */
-        .news-ticker-container {
-            background: #1a1917;
-            border-bottom: 1px solid var(--gold-primary);
-            border-top: 1px solid #333;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            height: 42px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
-        .news-ticker-title {
-            background: var(--gold-gradient);
-            color: #111;
-            font-weight: 800;
-            padding: 0 20px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            z-index: 2;
-            white-space: nowrap;
-            font-size: 0.95em;
-            box-shadow: -3px 0 8px rgba(0,0,0,0.3);
-        }
-        .news-ticker-wrapper {
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-            white-space: nowrap;
-        }
-        .news-ticker-text {
-            display: inline-block;
-            white-space: nowrap;
-            padding-right: 100%;
-            color: #f1f1f1;
-            font-size: 1em;
-            font-weight: 500;
-            animation: ticker-left-to-right 25s linear infinite;
-        }
-        .news-ticker-wrapper:hover .news-ticker-text {
-            animation-play-state: paused;
-        }
-
-        @keyframes ticker-left-to-right {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #1c1a17 0%, #2c2821 100%);
-            color: white;
-            text-align: center;
-            padding: 60px 20px 80px;
-            border-bottom: 3px solid var(--gold-primary);
-            position: relative;
-        }
-        .hero h1 {
-            margin: 0;
-            font-size: 2.5em;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-        }
-        .hero p {
-            font-size: 1.2em;
-            color: #d1d1d1;
-            margin-top: 10px;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        /* Services Section */
-        .section-card {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 16px;
-            border: 1px solid #e0d0b0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            margin: -35px auto 30px;
-            position: relative;
-            z-index: 10;
-        }
-        .result-link-wrapper {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .btn-gold-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--gold-gradient);
-            color: #111;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.05em;
-            padding: 14px 24px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(170, 124, 17, 0.2);
-            transition: all 0.3s ease;
-            flex: 1;
-            min-width: 220px;
-        }
-        .btn-gold-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(170, 124, 17, 0.4);
-        }
-
-        /* Inquiry Box */
-        .inquiry-container {
-            background: linear-gradient(180deg, #1f1e1c 0%, #111111 100%);
-            padding: 45px 20px;
-            margin-top: 30px;
-            border-radius: 20px;
-            border: 1px solid var(--gold-primary);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-        }
-        .inquiry-box {
-            background: #ffffff;
-            padding: 35px;
-            border-radius: 16px;
-            max-width: 520px;
-            margin: 0 auto;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            text-align: center;
-            border: 2px solid #f0e6d2;
-        }
-        .inquiry-box h2 {
-            color: #111;
-            margin-top: 0;
-            font-weight: 800;
-            font-size: 1.5em;
-            line-height: 1.4;
-        }
-        .inquiry-box input {
-            width: 100%;
-            padding: 14px;
-            margin: 20px 0 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1.1em;
-            text-align: center;
-            box-sizing: border-box;
-            outline: none;
-            transition: 0.3s;
-        }
-        .inquiry-box input:focus {
-            border-color: var(--gold-primary);
-            box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
-        }
-
-        .btn-search {
-            background: var(--gold-gradient);
-            color: #111;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 800;
-            width: 100%;
-            font-size: 1.1em;
-            transition: 0.3s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .btn-search:hover {
-            filter: brightness(1.05);
-            transform: translateY(-2px);
-        }
-
-        /* Results Area */
-        #q-display {
-            margin-top: 25px;
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-            background: #fbfaf6;
-            padding: 25px 20px;
-            border-radius: 12px;
-            border: 1px solid #ebd299;
-        }
-
-        .result-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid #e2d9c8;
-        }
-        .result-row:last-of-type {
-            border-bottom: none;
-            padding-bottom: 25px;
-        }
-
-        .result-label {
-            font-weight: 800;
-            color: #222;
-            width: 30%;
-            text-align: right;
-            font-size: 1.05em;
-        }
-
-        .result-value-container {
-            width: 65%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .result-value {
-            font-weight: 700;
-            font-size: 1.1em;
-            color: #333;
-            text-align: center;
-            line-height: 1.4;
-        }
-        .result-value.password-text {
-            color: #c9302c;
-            letter-spacing: 1px;
-        }
-
-        /* أزرار النسخ الصغيرة */
-        .btn-copy {
-            background: #e6e6e6;
-            color: #333;
-            border: 1px solid #ccc;
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 0.85em;
-            font-family: 'Tajawal', sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s ease;
-        }
-        .btn-copy:hover {
-            background: #d4af37;
-            color: #fff;
-            border-color: #aa7c11;
-        }
-
-        /* أزرار المنصات */
-        .platform-links-stacked {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 10px;
-        }
-        .btn-platform-full {
-            display: block;
-            width: 100%;
-            text-align: center;
-            padding: 14px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 1.1em;
-            text-decoration: none;
-            transition: 0.3s;
-            color: white;
-            box-sizing: border-box;
-        }
-        .btn-qureo-full { background: #28a745; }
-        .btn-qureo-full:hover { background: #218838; }
-
-        .btn-finance-full { background: #17a2b8; }
-        .btn-finance-full:hover { background: #138496; }
-
-        /* Footer */
-        .footer {
-            background: #0d0d0d;
-            color: #b5b5b5;
-            padding: 35px 0;
-            text-align: center;
-            margin-top: 60px;
-            border-top: 1px solid #333;
-        }
-        .footer p { margin: 5px 0; }
-        .footer .designer { color: var(--gold-primary); font-weight: bold; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 1.8em; }
-            .btn-gold-link { width: 100%; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدرسة الخدمة الثانوية العامة المشتركة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--gold-primary:#d4af37;--gold-dark:#aa7c11;--gold-gradient:linear-gradient(135deg,#bf953f 0%,#fcf6ba 25%,#b38728 50%,#fbf5b7 75%,#aa7c11 100%);--silver-gradient:linear-gradient(135deg,#e0e0e0 0%,#fff 50%,#b0b0b0 100%);--text-color:#2b2b2b}
+body{font-family:'Tajawal',sans-serif;margin:0;padding:0;background:#f4f5f7;color:var(--text-color);text-align:right;line-height:1.6}
+.navbar{background:#111;border-bottom:2px solid var(--gold-primary);padding:15px 0;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.navbar-container{width:90%;max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.logo a{background:var(--gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;font-size:1.5em;font-weight:800}
+.news-ticker-container{background:#1a1917;border-bottom:1px solid var(--gold-primary);border-top:1px solid #333;display:flex;align-items:center;overflow:hidden;height:42px;box-shadow:inset 0 0 10px rgba(0,0,0,.5)}
+.news-ticker-title{background:var(--gold-gradient);color:#111;font-weight:800;padding:0 20px;height:100%;display:flex;align-items:center;z-index:2;white-space:nowrap;font-size:.95em;box-shadow:-3px 0 8px rgba(0,0,0,.3)}
+.news-ticker-wrapper{flex:1;overflow:hidden;position:relative;white-space:nowrap}
+.news-ticker-text{display:inline-block;white-space:nowrap;padding-right:100%;color:#f1f1f1;font-size:1em;font-weight:500;animation:ticker-left-to-right 25s linear infinite}
+.news-ticker-wrapper:hover .news-ticker-text{animation-play-state:paused}
+@keyframes ticker-left-to-right{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.hero{background:linear-gradient(135deg,#1c1a17 0%,#2c2821 100%);color:#fff;text-align:center;padding:60px 20px 80px;border-bottom:3px solid var(--gold-primary);position:relative}
+.hero h1{margin:0;font-size:2.5em;background:var(--gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800}
+.hero p{font-size:1.2em;color:#d1d1d1;margin-top:10px}
+.container{width:90%;max-width:1000px;margin:0 auto}
+.section-card{background:#fff;padding:30px;border-radius:16px;border:1px solid #e0d0b0;box-shadow:0 10px 30px rgba(0,0,0,.08);margin:-35px auto 30px;position:relative;z-index:10}
+.result-link-wrapper{display:flex;gap:15px;flex-wrap:wrap;justify-content:center}
+.btn-gold-link{display:inline-flex;align-items:center;justify-content:center;background:var(--gold-gradient);color:#111;text-decoration:none;font-weight:700;font-size:1.05em;padding:14px 24px;border-radius:10px;box-shadow:0 4px 10px rgba(170,124,17,.2);transition:all .3s ease;flex:1;min-width:220px}
+.btn-gold-link:hover{transform:translateY(-2px);box-shadow:0 6px 15px rgba(170,124,17,.4)}
+.inquiry-container{background:linear-gradient(180deg,#1f1e1c 0%,#111 100%);padding:45px 20px;margin-top:30px;border-radius:20px;border:1px solid var(--gold-primary);box-shadow:0 15px 35px rgba(0,0,0,.2)}
+.inquiry-box{background:#fff;padding:35px;border-radius:16px;max-width:520px;margin:0 auto;box-shadow:0 10px 25px rgba(0,0,0,.15);text-align:center;border:2px solid #f0e6d2}
+.inquiry-box h2{color:#111;margin-top:0;font-weight:800;font-size:1.5em;line-height:1.4}
+.inquiry-box input{width:100%;padding:14px;margin:20px 0 15px;border:1px solid #ccc;border-radius:8px;font-size:1.1em;text-align:center;box-sizing:border-box;outline:none;transition:.3s}
+.inquiry-box input:focus{border-color:var(--gold-primary);box-shadow:0 0 8px rgba(212,175,55,.4)}
+.btn-search{background:var(--gold-gradient);color:#111;border:none;padding:14px 30px;border-radius:8px;cursor:pointer;font-weight:800;width:100%;font-size:1.1em;transition:.3s;box-shadow:0 4px 12px rgba(0,0,0,.15);font-family:'Tajawal',sans-serif}
+.btn-search:hover{filter:brightness(1.05);transform:translateY(-2px)}
+#q-display{margin-top:25px;display:none;animation:fadeIn .5s ease-in-out;background:#fbfaf6;padding:25px 20px;border-radius:12px;border:1px solid #ebd299}
+.result-row{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-bottom:1px solid #e2d9c8}
+.result-row:last-of-type{border-bottom:none;padding-bottom:25px}
+.result-label{font-weight:800;color:#222;width:30%;text-align:right;font-size:1.05em}
+.result-value-container{width:65%;display:flex;flex-direction:column;align-items:center;gap:10px}
+.result-value{font-weight:700;font-size:1.1em;color:#333;text-align:center;line-height:1.4}
+.result-value.password-text{color:#c9302c;letter-spacing:1px}
+.btn-copy{background:#e6e6e6;color:#333;border:1px solid #ccc;padding:5px 12px;border-radius:6px;font-size:.85em;font-family:'Tajawal',sans-serif;font-weight:bold;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s ease}
+.btn-copy:hover{background:#d4af37;color:#fff;border-color:#aa7c11}
+.platform-links-stacked{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.btn-platform-full{display:block;width:100%;text-align:center;padding:14px;border-radius:8px;font-weight:bold;font-size:1.1em;text-decoration:none;transition:.3s;color:#fff;box-sizing:border-box}
+.btn-qureo-full{background:#28a745}.btn-qureo-full:hover{background:#218838}
+.btn-finance-full{background:#17a2b8}.btn-finance-full:hover{background:#138496}
+.footer{background:#0d0d0d;color:#b5b5b5;padding:35px 0;text-align:center;margin-top:60px;border-top:1px solid #333}
+.footer p{margin:5px 0}.footer .designer{color:var(--gold-primary);font-weight:bold}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.hero h1{font-size:1.8em}.btn-gold-link{width:100%}}
+</style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="logo"><a href="#">مدرسة الخدمة الثانوية</a></div>
-        </div>
-    </nav>
+<nav class="navbar"><div class="navbar-container"><div class="logo"><a href="#">مدرسة الخدمة الثانوية</a></div></div></nav>
 
-    <div class="news-ticker-container">
-        <div class="news-ticker-title">📢 تنبيهات هامّة</div>
-        <div class="news-ticker-wrapper">
-            <div class="news-ticker-text">####### &nbsp;&nbsp;&nbsp;&nbsp; ####### &nbsp;&nbsp;&nbsp;&nbsp; ####### &nbsp;&nbsp;&nbsp;&nbsp; #######</div>
-        </div>
-    </div>
+<div class="news-ticker-container">
+<div class="news-ticker-title">📢 تنبيهات هامّة</div>
+<div class="news-ticker-wrapper"><div class="news-ticker-text">####### &nbsp;&nbsp;&nbsp;&nbsp; ####### &nbsp;&nbsp;&nbsp;&nbsp; ####### &nbsp;&nbsp;&nbsp;&nbsp; #######</div></div>
+</div>
 
-    <header class="hero">
-        <div class="container">
-            <h1>مدرسة الخدمة الثانوية العامة المشتركة</h1>
-            <p>نحو مستقبل تعليمي رقمي متميز</p>
-        </div>
-    </header>
+<header class="hero"><div class="container">
+<h1>مدرسة الخدمة الثانوية العامة المشتركة</h1>
+<p>نحو مستقبل تعليمي رقمي متميز</p>
+</div></header>
 
-    <div class="container">
-        <section class="section-card">
-            <div class="result-link-wrapper">
-                <a href="https://me-portal.qureo.education" target="_blank" class="btn-gold-link">
-                    <span>🤖 منصة كوريو (Qureo)</span>
-                </a>
-                <a href="https://egy.app.spx-learning-square.com/login" target="_blank" class="btn-gold-link" style="background: var(--silver-gradient); color: #222;">
-                    <span>💳 منصة الثقافة المالية</span>
-                </a>
-            </div>
-        </section>
+<div class="container">
+<section class="section-card"><div class="result-link-wrapper">
+<a href="https://me-portal.qureo.education" target="_blank" class="btn-gold-link"><span>🤖 منصة كوريو (Qureo)</span></a>
+<a href="https://egy.app.spx-learning-square.com/login" target="_blank" class="btn-gold-link" style="background:var(--silver-gradient);color:#222;"><span>💳 منصة الثقافة المالية</span></a>
+</div></section>
 
-        <div class="inquiry-container">
-            <div class="inquiry-box">
-                <h2>الاستعلام عن الكود واسم المستخدم وكلمة المرور لمنصة كوريو AI</h2>
-                <p style="color: #666; font-size: 0.95em;">أدخل الرقم القومي الخاص بك للحصول على بيانات الدخول</p>
-                <p style="color: #888; font-size: 0.85em; margin-top: -8px;">(لتجربة الموقع يمكنك استخدام الرقم القومي: <b style="color:var(--gold-dark)">ادخل الـ 14 رقماً </b>)</p>
+<div class="inquiry-container"><div class="inquiry-box">
+<h2>الاستعلام عن الكود واسم المستخدم وكلمة المرور لمنصة كوريو AI</h2>
+<p style="color:#666;font-size:.95em;">أدخل الرقم القومي الخاص بك للحصول على بيانات الدخول</p>
 
-                <input type="text" id="nationalId" placeholder="أدخل الـ 14 رقم..." maxlength="14">
-                <button class="btn-search" onclick="fetchQureoData()">استعلام الآن</button>
+<input type="text" id="nationalId" placeholder="أدخل الـ 14 رقم..." maxlength="14" inputmode="numeric" autocomplete="off">
+<button class="btn-search" onclick="fetchQureoData()">استعلام الآن</button>
 
-                <div id="q-display">
-                    <div class="result-row">
-                        <div class="result-label">الاسم:</div>
-                        <div class="result-value-container">
-                            <span class="result-value" id="s-name"></span>
-                        </div>
-                    </div>
+<div id="q-display">
+<div class="result-row"><div class="result-label">الاسم:</div><div class="result-value-container"><span class="result-value" id="s-name"></span></div></div>
+<div class="result-row"><div class="result-label">اسم المستخدم:</div><div class="result-value-container"><span class="result-value" id="s-user" style="direction:ltr;"></span><button class="btn-copy" onclick="copyText('s-user',this)">📋 نسخ اسم المستخدم</button></div></div>
+<div class="result-row"><div class="result-label">كلمة المرور:</div><div class="result-value-container"><span class="result-value password-text" id="s-pass" style="direction:ltr;"></span><button class="btn-copy" onclick="copyText('s-pass',this)">📋 نسخ كلمة المرور</button></div></div>
+<div class="platform-links-stacked">
+<a id="s-link" href="#" target="_blank" class="btn-platform-full btn-qureo-full">دخول كوريو</a>
+<a href="https://egy.app.spx-learning-square.com/login" target="_blank" class="btn-platform-full btn-finance-full">دخول الثقافة المالية</a>
+</div>
+</div>
 
-                    <div class="result-row">
-                        <div class="result-label">اسم المستخدم:</div>
-                        <div class="result-value-container">
-                            <span class="result-value" id="s-user" style="direction: ltr;"></span>
-                            <button class="btn-copy" onclick="copyText('s-user', this)">📋 نسخ اسم المستخدم</button>
-                        </div>
-                    </div>
+<div id="q-error" style="color:#d9534f;margin-top:15px;font-weight:bold;"></div>
+</div></div>
+</div>
 
-                    <div class="result-row">
-                        <div class="result-label">كلمة المرور:</div>
-                        <div class="result-value-container">
-                            <span class="result-value password-text" id="s-pass" style="direction: ltr;"></span>
-                            <button class="btn-copy" onclick="copyText('s-pass', this)">📋 نسخ كلمة المرور</button>
-                        </div>
-                    </div>
+<footer class="footer">
+<p>حقوق النشر © 2026 - مدرسة الخدمة الثانوية</p>
+<p>تطوير الأستاذ: <span class="designer"> محمود عادل</span></p>
+</footer>
 
-                    <div class="platform-links-stacked">
-                        <a id="s-link" href="#" target="_blank" class="btn-platform-full btn-qureo-full">دخول كوريو</a>
-                        <a href="https://egy.app.spx-learning-square.com/login" target="_blank" class="btn-platform-full btn-finance-full">دخول الثقافة المالية</a>
-                    </div>
-                </div>
+<script>
+// ملفات البيانات: data.json أساسي، وأي ملف إضافي اختياري (لا يسبب خطأ لو غير موجود)
+const DATA_FILES = ['data.json', 'mnazel.json'];
+let studentsCache = null;
 
-                <div id="q-error" style="color:#d9534f; margin-top:15px; font-weight:bold;"></div>
-            </div>
-        </div>
-    </div>
+// يحوّل الأرقام العربية (٠-٩) والفارسية (۰-۹) إلى إنجليزية ويحذف أي حرف غير رقمي
+function normalizeId(str) {
+    return String(str ?? '')
+        .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+        .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+        .replace(/\D/g, '');
+}
 
-    <footer class="footer">
-        <p>حقوق النشر © 2026 - مدرسة الخدمة الثانوية</p>
-        <p>تطوير الأستاذ: <span class="designer"> محمود عادل</span></p>
-    </footer>
+// يقبل مصفوفة مباشرة أو كائناً يحتوي على مصفوفة
+function toArray(json) {
+    if (Array.isArray(json)) return json;
+    if (json && typeof json === 'object') {
+        const inner = Object.values(json).find(Array.isArray);
+        return inner || Object.values(json);
+    }
+    return [];
+}
 
-    <script>
-        const defaultStudent = {
-            "الرقم القومي": "12345678910123",
-            "الاسم": "طالب افتراضي",
-            "اسم المستخدم": "123456",
-            "كلمة المرور": "123456",
-            "رابط منصة ": "https://me-portal.qureo.education"
-        };
-
-        // تحويل أي أرقام عربية إلى إنجليزية للمقارنة الصحيحة
-        function convertToArabicNumToEnglish(str) {
-            return String(str).replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+async function loadStudents() {
+    if (studentsCache) return studentsCache;
+    const all = [];
+    let mainOk = false;
+    for (const file of DATA_FILES) {
+        try {
+            const res = await fetch(file + '?v=' + Date.now(), { cache: 'no-store' });
+            if (!res.ok) continue;
+            const text = await res.text();
+            const json = JSON.parse(text.replace(/^\uFEFF/, ''));
+            all.push(...toArray(json));
+            if (file === DATA_FILES[0]) mainOk = true;
+        } catch (e) {
+            console.error('تعذر قراءة', file, e);
         }
+    }
+    if (!mainOk) throw new Error('main-missing');
+    studentsCache = all;
+    return all;
+}
 
-        async function fetchQureoData() {
-            let idInputRaw = document.getElementById('nationalId').value.trim();
-            let idInput = convertToArabicNumToEnglish(idInputRaw);
-            
-            const display = document.getElementById('q-display');
-            const error = document.getElementById('q-error');
+async function fetchQureoData() {
+    const idInput = normalizeId(document.getElementById('nationalId').value);
+    const display = document.getElementById('q-display');
+    const error = document.getElementById('q-error');
 
-            display.style.display = "none";
-            error.innerText = "";
+    display.style.display = 'none';
+    error.innerText = '';
 
-            if (!idInput) {
-                error.innerText = "يرجى إدخال الرقم القومي.";
-                return;
-            }
+    if (!idInput) { error.innerText = 'يرجى إدخال الرقم القومي.'; return; }
+    if (idInput.length !== 14) { error.innerText = 'الرقم القومي يجب أن يتكون من 14 رقماً.'; return; }
 
-            if (idInput === defaultStudent["الرقم القومي"]) {
-                renderStudentData(defaultStudent);
-                return;
-            }
+    try {
+        const students = await loadStudents();
+        const student = students.find(s => {
+            const nId = s['الرقم القومي'] ?? s['الرقم القومى'] ?? s['الرقم القومي '];
+            return nId !== undefined && normalizeId(nId) === idInput;
+        });
+        if (student) renderStudentData(student);
+        else error.innerText = 'عفواً، الرقم القومي غير مسجل لدينا.';
+    } catch (err) {
+        console.error(err);
+        error.innerText = location.protocol === 'file:'
+            ? 'لا يمكن قراءة data.json عند فتح الصفحة مباشرة من الجهاز. ارفع الموقع على استضافة أو شغّله عبر خادم محلي.'
+            : 'تعذر قراءة ملف data.json. تأكد أنه في نفس مجلد index.html وبنفس الاسم تماماً.';
+    }
+}
 
-            try {
-                // جلب البيانات مع تجاهل أخطاء الملف المفقود لضمان عدم توقف السكربت
-                const [resMain, resMnazel] = await Promise.all([
-                    fetch('data.json').catch(() => null),
-                    fetch('mnazel.json').catch(() => null)
-                ]);
+function renderStudentData(student) {
+    document.getElementById('s-name').innerText = student['الاسم'] || 'غير متاح';
 
-                // تحويل الاستجابة إلى JSON إذا كانت ناجحة
-                const dataMain = (resMain && resMain.ok) ? await resMain.json() : [];
-                const dataMnazel = (resMnazel && resMnazel.ok) ? await resMnazel.json() : [];
+    const username = student['اسم المستخدم'] || student['الكود'] || student['كود الطالب'] || 'غير متوفر';
+    document.getElementById('s-user').innerText = username;
 
-                const allStudents = [...dataMain, ...dataMnazel];
-                
-                if (allStudents.length === 0) {
-                    error.innerText = "تعذر قراءة قواعد البيانات. يرجى التأكد من رفع ملفات JSON وتحديث الصفحة.";
-                    return;
-                }
+    const passEl = document.getElementById('s-pass');
+    const password = student['كلمة المرور'];
+    if (password) {
+        passEl.innerText = password;
+        passEl.classList.add('password-text');
+    } else {
+        passEl.innerText = 'غير متوفرة';
+        passEl.classList.remove('password-text');
+    }
 
-                // البحث الدقيق مع تحويل الأرقام والنصوص لتطابق مثالي
-                const student = allStudents.find(s => {
-                    const nId = s["الرقم القومي"] || s["الرقم القومى"];
-                    // تحويل القيمة الموجودة في الجسون إلى نص قبل المقارنة
-                    return nId && convertToArabicNumToEnglish(String(nId).trim()) === idInput;
-                });
+    document.getElementById('s-link').href = student['رابط منصة '] || student['رابط منصة'] || 'https://me-portal.qureo.education';
+    document.getElementById('q-display').style.display = 'block';
+}
 
-                if (student) {
-                    renderStudentData(student);
-                } else {
-                    error.innerText = "عفواً، الرقم القومي غير مسجل لدينا.";
-                }
-            } catch (err) {
-                error.innerText = "حدث خطأ أثناء معالجة البيانات.";
-                console.error(err);
-            }
-        }
+function copyText(elementId, btnElement) {
+    const textToCopy = document.getElementById(elementId).innerText;
+    if (!textToCopy || textToCopy === 'غير متوفر' || textToCopy === 'غير متوفرة') return;
 
-        function renderStudentData(student) {
-            document.getElementById('s-name').innerText = student["الاسم"] || "غير متاح";
-            
-            // قراءة اسم المستخدم، ولو لم يوجد يتم قراءة الكود
-            const username = student["اسم المستخدم"] || student["الكود"] || student["كود الطالب"] || "غير متوفر";
-            document.getElementById('s-user').innerText = username;
-            
-            const password = student["كلمة المرور"];
-            if (password) {
-                document.getElementById('s-pass').innerText = password;
-                document.getElementById('s-pass').classList.add("password-text");
-            } else {
-                document.getElementById('s-pass').innerText = "غير متوفرة";
-                document.getElementById('s-pass').classList.remove("password-text");
-            }
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalText = btnElement.innerText;
+        btnElement.innerText = '✓ تم النسخ!';
+        btnElement.style.background = '#28a745';
+        btnElement.style.color = '#fff';
+        btnElement.style.borderColor = '#28a745';
+        setTimeout(() => {
+            btnElement.innerText = originalText;
+            btnElement.style.background = '#e6e6e6';
+            btnElement.style.color = '#333';
+            btnElement.style.borderColor = '#ccc';
+        }, 2000);
+    }).catch(err => console.error('فشل النسخ: ', err));
+}
 
-            const qureoUrl = student["رابط منصة "] || student["رابط منصة"] || "https://me-portal.qureo.education";
-            document.getElementById('s-link').href = qureoUrl;
-
-            document.getElementById('q-display').style.display = "block";
-        }
-
-        function copyText(elementId, btnElement) {
-            const textToCopy = document.getElementById(elementId).innerText;
-            if (!textToCopy || textToCopy === "غير متوفر" || textToCopy === "غير متوفرة") return;
-
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const originalText = btnElement.innerText;
-                btnElement.innerText = "✓ تم النسخ!";
-                btnElement.style.background = "#28a745";
-                btnElement.style.color = "#fff";
-                btnElement.style.borderColor = "#28a745";
-
-                setTimeout(() => {
-                    btnElement.innerText = originalText;
-                    btnElement.style.background = "#e6e6e6";
-                    btnElement.style.color = "#333";
-                    btnElement.style.borderColor = "#ccc";
-                }, 2000);
-            }).catch(err => {
-                console.error("فشل النسخ: ", err);
-            });
-        }
-    </script>
+document.getElementById('nationalId').addEventListener('keydown', e => {
+    if (e.key === 'Enter') fetchQureoData();
+});
+</script>
 </body>
 </html>
