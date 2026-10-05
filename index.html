@@ -365,21 +365,6 @@
         <!-- قسم الخدمات وروابط المنصات -->
         <section class="section-card">
             <div class="result-link-wrapper">
-
-                <!-- ========================================================================= -->
-                <!-- 💡 تلميح برمجي (DEVELOPER HINT) - استرجاع رابط النتيجة:                    -->
-                <!-- لتمكين زر الاستعلام عن النتيجة/الشهادة مجدداً:                                -->
-                <!-- 1. أزل علامات التعليق البرمجي <!-- و --> من حول العنصر أدناه.                  -->
-                <!-- 2. الملف المخصص للنتائج هو: result.html (موجود بنفس المستودع).             -->
-                <!-- 3. تأكد من تحديث قاعدة بيانات النتائج داخل ملف result.html عند ظهور النتيجة. -->
-                <!-- ========================================================================= -->
-
-                <!-- 
-                <a href="result.html" class="btn-gold-link">
-                    <span>📑 استعلام عن نتيجة الامتحانات</span>
-                </a>
-                -->
-
                 <!-- رابط منصة كوريو الأساسي -->
                 <a href="https://me-portal.qureo.education" target="_blank" class="btn-gold-link">
                     <span>🤖 منصة كوريو (Qureo)</span>
@@ -409,7 +394,7 @@
                             <td><span id="s-name"></span></td>
                         </tr>
                         <tr>
-                            <td class="label">اسم المستخدم:</td>
+                            <td class="label">اسم المستخدم (أو الكود):</td>
                             <td>
                                 <div class="value-box">
                                     <span id="s-user" style="direction: ltr; text-align: right; font-weight: bold;"></span>
@@ -429,8 +414,7 @@
                     </table>
 
                     <div class="platform-links">
-                        <a id="s-link" href="#" target="_blank" class="btn-platform btn-qureo">دخول كوريو</a>
-                        <a href="https://egy.app.spx-learning-square.com/login" target="_blank" class="btn-platform btn-finance">دخول الثقافة المالية</a>
+                        <a id="s-link" href="#" target="_blank" class="btn-platform btn-qureo">دخول المنصة</a>
                     </div>
                 </div>
 
@@ -476,20 +460,20 @@
 
             // 2. البحث داخل ملفي data.json و mnazel.json بأسلوب متوازٍ
             try {
-                // جلب كلا الملفين، وفي حال عدم وجود أحدهما يتم إرجاع مصفوفة فارغة كي لا يتوقف البحث
+                // جلب كلا الملفين معاً لتسريع العملية
                 const [dataMain, dataMnazel] = await Promise.all([
                     fetch('data.json').then(res => res.ok ? res.json() : []).catch(() => []),
                     fetch('mnazel.json').then(res => res.ok ? res.json() : []).catch(() => [])
                 ]);
 
-                // دمج المصفوفتين معاً
+                // دمج بيانات الملفين في مصفوفة واحدة
                 const allStudents = [...dataMain, ...dataMnazel];
                 
                 if (allStudents.length === 0) {
-                    throw new Error("لم يتم العثور على أي بيانات في الملفات المحددة");
+                    throw new Error("لم يتم العثور على أي بيانات في الملفات.");
                 }
 
-                // البحث عن الطالب في المصفوفة المدمجة
+                // البحث عن الطالب برقم القومي
                 const student = allStudents.find(s => String(s["الرقم القومي"]).trim() === idInput);
 
                 if (student) {
@@ -503,14 +487,24 @@
             }
         }
 
-        // دالة عرض بيانات الطالب
+        // دالة عرض بيانات الطالب (التي تدعم اختلاف الهيكل بين الملفين)
         function renderStudentData(student) {
+            // عرض الاسم
             document.getElementById('s-name').innerText = student["الاسم"] || "غير متاح";
-            // تم إضافة student["الكود"] لتعمل مع بيانات ملف mnazel.json
-            document.getElementById('s-user').innerText = student["اسم المستخدم"] || student["كود الطالب"] || student["الكود"] || "غير متاح";
-            document.getElementById('s-pass').innerText = student["كلمة المرور"] || "غير متاح";
+            
+            // عرض اسم المستخدم: إذا كان طالباً من data.json سيقرأ اسم المستخدم، وإذا كان من mnazel.json سيقرأ الكود 
+            const username = student["اسم المستخدم"] || student["كود الطالب"] || student["الكود"] || "غير متوفر";
+            document.getElementById('s-user').innerText = username;
+            
+            // عرض كلمة المرور: طلاب المنازل لا يمتلكون كلمة مرور في الملف، لذا نعرض رسالة مناسبة
+            if (student["كلمة المرور"]) {
+                document.getElementById('s-pass').innerText = student["كلمة المرور"];
+            } else {
+                document.getElementById('s-pass').innerText = "غير متوفرة";
+            }
 
-            const qureoUrl = student["رابط منصة "] || student["رابط منصة"] || "https://me-portal.qureo.education";
+            // رابط المنصة: قراءة الرابط إن وجد بأسماء مختلفة، وإلا وضع الرابط الافتراضي
+            const qureoUrl = student["رابط منصة"] || student["رابط منصة "] || student["رابط المنصة"] || "https://me-portal.qureo.education";
             document.getElementById('s-link').href = qureoUrl;
 
             document.getElementById('q-display').style.display = "block";
@@ -519,7 +513,7 @@
         // دالة النسخ مع تغيير نص الزر مؤقتًا
         function copyText(elementId, btnElement) {
             const textToCopy = document.getElementById(elementId).innerText;
-            if (!textToCopy || textToCopy === "غير متاح") return;
+            if (!textToCopy || textToCopy === "غير متوفر" || textToCopy === "غير متوفرة") return;
 
             navigator.clipboard.writeText(textToCopy).then(() => {
                 const originalText = btnElement.innerText;
