@@ -88,7 +88,6 @@
             color: #f1f1f1;
             font-size: 1em;
             font-weight: 500;
-            /* حركة النص من اليسار إلى اليمين */
             animation: ticker-left-to-right 25s linear infinite;
         }
         .news-ticker-wrapper:hover .news-ticker-text {
@@ -129,7 +128,7 @@
             margin: 0 auto;
         }
 
-        /* Services & Links Section */
+        /* Services Section */
         .section-card {
             background: #ffffff;
             padding: 30px;
@@ -140,7 +139,6 @@
             position: relative;
             z-index: 10;
         }
-
         .result-link-wrapper {
             display: flex;
             gap: 15px;
@@ -229,7 +227,7 @@
             transform: translateY(-2px);
         }
 
-        /* Results Area - Updated Layout */
+        /* Results Area */
         #q-display {
             margin-top: 25px;
             display: none;
@@ -302,7 +300,7 @@
             border-color: #aa7c11;
         }
 
-        /* أزرار المنصات المكدسة */
+        /* أزرار المنصات */
         .platform-links-stacked {
             display: flex;
             flex-direction: column;
@@ -359,7 +357,6 @@
         </div>
     </nav>
 
-    <!-- شريط الأخبار المتحرك (من اليسار إلى اليمين) -->
     <div class="news-ticker-container">
         <div class="news-ticker-title">📢 تنبيهات هامّة</div>
         <div class="news-ticker-wrapper">
@@ -375,22 +372,17 @@
     </header>
 
     <div class="container">
-        <!-- قسم الخدمات وروابط المنصات -->
         <section class="section-card">
             <div class="result-link-wrapper">
-                <!-- رابط منصة كوريو الأساسي -->
                 <a href="https://me-portal.qureo.education" target="_blank" class="btn-gold-link">
                     <span>🤖 منصة كوريو (Qureo)</span>
                 </a>
-
-                <!-- رابط منصة الثقافة المالية -->
                 <a href="https://egy.app.spx-learning-square.com/login" target="_blank" class="btn-gold-link" style="background: var(--silver-gradient); color: #222;">
                     <span>💳 منصة الثقافة المالية</span>
                 </a>
             </div>
         </section>
 
-        <!-- صندوق الاستعلام عن منصة كوريو -->
         <div class="inquiry-container">
             <div class="inquiry-box">
                 <h2>الاستعلام عن الكود واسم المستخدم وكلمة المرور لمنصة كوريو AI</h2>
@@ -401,7 +393,6 @@
                 <button class="btn-search" onclick="fetchQureoData()">استعلام الآن</button>
 
                 <div id="q-display">
-                    
                     <div class="result-row">
                         <div class="result-label">الاسم:</div>
                         <div class="result-value-container">
@@ -441,8 +432,7 @@
         <p>تطوير الأستاذ: <span class="designer"> محمود عادل</span></p>
     </footer>
 
-       <script>
-        // الطالب الافتراضي لتجربة الموقع
+    <script>
         const defaultStudent = {
             "الرقم القومي": "12345678910123",
             "الاسم": "طالب افتراضي",
@@ -451,9 +441,15 @@
             "رابط منصة ": "https://me-portal.qureo.education"
         };
 
-        // دالة الاستعلام
+        // تحويل أي أرقام عربية إلى إنجليزية للمقارنة الصحيحة
+        function convertToArabicNumToEnglish(str) {
+            return String(str).replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+        }
+
         async function fetchQureoData() {
-            const idInput = document.getElementById('nationalId').value.trim();
+            let idInputRaw = document.getElementById('nationalId').value.trim();
+            let idInput = convertToArabicNumToEnglish(idInputRaw);
+            
             const display = document.getElementById('q-display');
             const error = document.getElementById('q-error');
 
@@ -465,80 +461,69 @@
                 return;
             }
 
-            // 1. التحقق أولاً إذا كان مدخلاً هو طالب التجربة الافتراضي
             if (idInput === defaultStudent["الرقم القومي"]) {
                 renderStudentData(defaultStudent);
                 return;
             }
 
             try {
-                // طباعة رسالة توضيحية للمطور
-                console.log("جاري البحث عن الرقم القومي:", idInput);
+                // جلب البيانات مع تجاهل أخطاء الملف المفقود لضمان عدم توقف السكربت
+                const [resMain, resMnazel] = await Promise.all([
+                    fetch('data.json').catch(() => null),
+                    fetch('mnazel.json').catch(() => null)
+                ]);
 
-                // جلب الملفات بطريقة تكتشف الأخطاء وتطبعها بدلاً من التوقف الصامت
-                const pMain = fetch('data.json')
-                    .then(res => res.ok ? res.json() : [])
-                    .catch(e => { console.error("مشكلة في قراءة data.json:", e); return []; });
-
-                const pMnazel = fetch('mnazel.json')
-                    .then(res => res.ok ? res.json() : [])
-                    .catch(e => { console.error("مشكلة في قراءة mnazel.json (تأكد من صحة تنسيق الجسون):", e); return []; });
-
-                const [dataMain, dataMnazel] = await Promise.all([pMain, pMnazel]);
-                
-                console.log(`تم تحميل: ${dataMain.length} طالب منتظم، و ${dataMnazel.length} طالب منازل.`);
+                // تحويل الاستجابة إلى JSON إذا كانت ناجحة
+                const dataMain = (resMain && resMain.ok) ? await resMain.json() : [];
+                const dataMnazel = (resMnazel && resMnazel.ok) ? await resMnazel.json() : [];
 
                 const allStudents = [...dataMain, ...dataMnazel];
                 
                 if (allStudents.length === 0) {
-                    throw new Error("لم يتم العثور على أي بيانات في كلا الملفين!");
+                    error.innerText = "تعذر قراءة قواعد البيانات. يرجى التأكد من رفع ملفات JSON وتحديث الصفحة.";
+                    return;
                 }
 
-                // البحث بمرونة (يدعم "الرقم القومي" بالياء أو "الرقم القومى" بالألف المقصورة)
+                // البحث الدقيق مع تحويل الأرقام والنصوص لتطابق مثالي
                 const student = allStudents.find(s => {
-                    const nId = s["الرقم القومي"] || s["الرقم القومى"] || "";
-                    return String(nId).trim() === idInput;
+                    const nId = s["الرقم القومي"] || s["الرقم القومى"];
+                    // تحويل القيمة الموجودة في الجسون إلى نص قبل المقارنة
+                    return nId && convertToArabicNumToEnglish(String(nId).trim()) === idInput;
                 });
 
                 if (student) {
-                    console.log("تم العثور على الطالب بنجاح!");
                     renderStudentData(student);
                 } else {
                     error.innerText = "عفواً، الرقم القومي غير مسجل لدينا.";
-                    console.log("الرقم القومي غير موجود في قائمة الطلاب المدمجة.");
                 }
             } catch (err) {
-                error.innerText = "حدث خطأ أثناء قراءة ملفات البيانات.";
-                console.error("خطأ عام في تنفيذ الاستعلام:", err);
+                error.innerText = "حدث خطأ أثناء معالجة البيانات.";
+                console.error(err);
             }
         }
 
-        // دالة عرض بيانات الطالب
         function renderStudentData(student) {
-            // عرض الاسم
             document.getElementById('s-name').innerText = student["الاسم"] || "غير متاح";
             
-            // عرض اسم المستخدم أو الكود بمرونة لأي مفتاح محتمل
-            const username = student["اسم المستخدم"] || student["كود الطالب"] || student["الكود"] || "غير متوفر";
+            // قراءة اسم المستخدم، ولو لم يوجد يتم قراءة الكود
+            const username = student["اسم المستخدم"] || student["الكود"] || student["كود الطالب"] || "غير متوفر";
             document.getElementById('s-user').innerText = username;
             
-            // عرض كلمة المرور
-            if (student["كلمة المرور"]) {
-                document.getElementById('s-pass').innerText = student["كلمة المرور"];
+            const password = student["كلمة المرور"];
+            if (password) {
+                document.getElementById('s-pass').innerText = password;
                 document.getElementById('s-pass').classList.add("password-text");
             } else {
                 document.getElementById('s-pass').innerText = "غير متوفرة";
                 document.getElementById('s-pass').classList.remove("password-text");
             }
 
-            // رابط المنصة الافتراضي
-            const qureoUrl = student["رابط منصة"] || student["رابط منصة "] || student["رابط المنصة"] || "https://me-portal.qureo.education";
+            const qureoUrl = student["رابط منصة "] || student["رابط منصة"] || "https://me-portal.qureo.education";
             document.getElementById('s-link').href = qureoUrl;
 
             document.getElementById('q-display').style.display = "block";
         }
 
-        // دالة النسخ مع تغيير نص الزر مؤقتًا
         function copyText(elementId, btnElement) {
             const textToCopy = document.getElementById(elementId).innerText;
             if (!textToCopy || textToCopy === "غير متوفر" || textToCopy === "غير متوفرة") return;
@@ -561,6 +546,5 @@
             });
         }
     </script>
-
 </body>
 </html>
