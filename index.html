@@ -365,7 +365,7 @@
         <!-- قسم الخدمات وروابط المنصات -->
         <section class="section-card">
             <div class="result-link-wrapper">
-                
+
                 <!-- ========================================================================= -->
                 <!-- 💡 تلميح برمجي (DEVELOPER HINT) - استرجاع رابط النتيجة:                    -->
                 <!-- لتمكين زر الاستعلام عن النتيجة/الشهادة مجدداً:                                -->
@@ -373,7 +373,7 @@
                 <!-- 2. الملف المخصص للنتائج هو: result.html (موجود بنفس المستودع).             -->
                 <!-- 3. تأكد من تحديث قاعدة بيانات النتائج داخل ملف result.html عند ظهور النتيجة. -->
                 <!-- ========================================================================= -->
-                
+
                 <!-- 
                 <a href="result.html" class="btn-gold-link">
                     <span>📑 استعلام عن نتيجة الامتحانات</span>
@@ -398,7 +398,7 @@
                 <h2>منصة كوريو (AI)</h2>
                 <p style="color: #666; font-size: 0.95em;">أدخل الرقم القومي الخاص بك للحصول على بيانات الدخول</p>
                 <p style="color: #888; font-size: 0.85em; margin-top: -8px;">(لتجربة الموقع يمكنك استخدام الرقم القومي: <b style="color:var(--gold-dark)">ادخل الـ 14 رقماً </b>)</p>
-                
+
                 <input type="text" id="nationalId" placeholder="أدخل الـ 14 رقم..." maxlength="14">
                 <button class="btn-search" onclick="fetchQureoData()">استعلام الآن</button>
 
@@ -427,13 +427,13 @@
                             </td>
                         </tr>
                     </table>
-                    
+
                     <div class="platform-links">
                         <a id="s-link" href="#" target="_blank" class="btn-platform btn-qureo">دخول كوريو</a>
                         <a href="https://egy.app.spx-learning-square.com/login" target="_blank" class="btn-platform btn-finance">دخول الثقافة المالية</a>
                     </div>
                 </div>
-                
+
                 <div id="q-error" style="color:#d9534f; margin-top:15px; font-weight:bold;"></div>
             </div>
         </div>
@@ -474,16 +474,23 @@
                 return;
             }
 
-            // 2. إذا لم يكن طالب التجربة، يتم البحث داخل ملف data.json
+            // 2. البحث داخل ملفي data.json و mnazel.json بأسلوب متوازٍ
             try {
-                const response = await fetch('data.json');
+                // جلب كلا الملفين، وفي حال عدم وجود أحدهما يتم إرجاع مصفوفة فارغة كي لا يتوقف البحث
+                const [dataMain, dataMnazel] = await Promise.all([
+                    fetch('data.json').then(res => res.ok ? res.json() : []).catch(() => []),
+                    fetch('mnazel.json').then(res => res.ok ? res.json() : []).catch(() => [])
+                ]);
+
+                // دمج المصفوفتين معاً
+                const allStudents = [...dataMain, ...dataMnazel];
                 
-                if (!response.ok) {
-                    throw new Error("لم يتم العثور على ملف data.json");
+                if (allStudents.length === 0) {
+                    throw new Error("لم يتم العثور على أي بيانات في الملفات المحددة");
                 }
 
-                const students = await response.json();
-                const student = students.find(s => String(s["الرقم القومي"]).trim() === idInput);
+                // البحث عن الطالب في المصفوفة المدمجة
+                const student = allStudents.find(s => String(s["الرقم القومي"]).trim() === idInput);
 
                 if (student) {
                     renderStudentData(student);
@@ -491,7 +498,7 @@
                     error.innerText = "عفواً، الرقم القومي غير مسجل لدينا.";
                 }
             } catch (err) {
-                error.innerText = "حدث خطأ أثناء قراءة ملف البيانات (data.json).";
+                error.innerText = "حدث خطأ أثناء قراءة ملفات البيانات.";
                 console.error("Error fetching JSON:", err);
             }
         }
@@ -499,12 +506,13 @@
         // دالة عرض بيانات الطالب
         function renderStudentData(student) {
             document.getElementById('s-name').innerText = student["الاسم"] || "غير متاح";
-            document.getElementById('s-user').innerText = student["اسم المستخدم"] || student["كود الطالب"] || "غير متاح";
+            // تم إضافة student["الكود"] لتعمل مع بيانات ملف mnazel.json
+            document.getElementById('s-user').innerText = student["اسم المستخدم"] || student["كود الطالب"] || student["الكود"] || "غير متاح";
             document.getElementById('s-pass').innerText = student["كلمة المرور"] || "غير متاح";
-            
+
             const qureoUrl = student["رابط منصة "] || student["رابط منصة"] || "https://me-portal.qureo.education";
             document.getElementById('s-link').href = qureoUrl;
-            
+
             document.getElementById('q-display').style.display = "block";
         }
 
