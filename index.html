@@ -441,7 +441,7 @@
         <p>تطوير الأستاذ: <span class="designer"> محمود عادل</span></p>
     </footer>
 
-    <script>
+       <script>
         // الطالب الافتراضي لتجربة الموقع
         const defaultStudent = {
             "الرقم القومي": "12345678910123",
@@ -471,32 +471,45 @@
                 return;
             }
 
-            // 2. البحث داخل ملفي data.json و mnazel.json بأسلوب متوازٍ
             try {
-                // جلب كلا الملفين معاً لتسريع العملية
-                const [dataMain, dataMnazel] = await Promise.all([
-                    fetch('data.json').then(res => res.ok ? res.json() : []).catch(() => []),
-                    fetch('mnazel.json').then(res => res.ok ? res.json() : []).catch(() => [])
-                ]);
+                // طباعة رسالة توضيحية للمطور
+                console.log("جاري البحث عن الرقم القومي:", idInput);
 
-                // دمج بيانات الملفين في مصفوفة واحدة
+                // جلب الملفات بطريقة تكتشف الأخطاء وتطبعها بدلاً من التوقف الصامت
+                const pMain = fetch('data.json')
+                    .then(res => res.ok ? res.json() : [])
+                    .catch(e => { console.error("مشكلة في قراءة data.json:", e); return []; });
+
+                const pMnazel = fetch('mnazel.json')
+                    .then(res => res.ok ? res.json() : [])
+                    .catch(e => { console.error("مشكلة في قراءة mnazel.json (تأكد من صحة تنسيق الجسون):", e); return []; });
+
+                const [dataMain, dataMnazel] = await Promise.all([pMain, pMnazel]);
+                
+                console.log(`تم تحميل: ${dataMain.length} طالب منتظم، و ${dataMnazel.length} طالب منازل.`);
+
                 const allStudents = [...dataMain, ...dataMnazel];
                 
                 if (allStudents.length === 0) {
-                    throw new Error("لم يتم العثور على أي بيانات في الملفات.");
+                    throw new Error("لم يتم العثور على أي بيانات في كلا الملفين!");
                 }
 
-                // البحث عن الطالب برقم القومي
-                const student = allStudents.find(s => String(s["الرقم القومي"]).trim() === idInput);
+                // البحث بمرونة (يدعم "الرقم القومي" بالياء أو "الرقم القومى" بالألف المقصورة)
+                const student = allStudents.find(s => {
+                    const nId = s["الرقم القومي"] || s["الرقم القومى"] || "";
+                    return String(nId).trim() === idInput;
+                });
 
                 if (student) {
+                    console.log("تم العثور على الطالب بنجاح!");
                     renderStudentData(student);
                 } else {
                     error.innerText = "عفواً، الرقم القومي غير مسجل لدينا.";
+                    console.log("الرقم القومي غير موجود في قائمة الطلاب المدمجة.");
                 }
             } catch (err) {
                 error.innerText = "حدث خطأ أثناء قراءة ملفات البيانات.";
-                console.error("Error fetching JSON:", err);
+                console.error("خطأ عام في تنفيذ الاستعلام:", err);
             }
         }
 
@@ -505,15 +518,17 @@
             // عرض الاسم
             document.getElementById('s-name').innerText = student["الاسم"] || "غير متاح";
             
-            // عرض اسم المستخدم أو الكود 
+            // عرض اسم المستخدم أو الكود بمرونة لأي مفتاح محتمل
             const username = student["اسم المستخدم"] || student["كود الطالب"] || student["الكود"] || "غير متوفر";
             document.getElementById('s-user').innerText = username;
             
             // عرض كلمة المرور
             if (student["كلمة المرور"]) {
                 document.getElementById('s-pass').innerText = student["كلمة المرور"];
+                document.getElementById('s-pass').classList.add("password-text");
             } else {
                 document.getElementById('s-pass').innerText = "غير متوفرة";
+                document.getElementById('s-pass').classList.remove("password-text");
             }
 
             // رابط المنصة الافتراضي
@@ -546,5 +561,6 @@
             });
         }
     </script>
+
 </body>
 </html>
