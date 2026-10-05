@@ -96,12 +96,8 @@
         }
 
         @keyframes ticker-left-to-right {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         /* Hero Section */
@@ -195,13 +191,15 @@
             color: #111;
             margin-top: 0;
             font-weight: 800;
+            font-size: 1.5em;
+            line-height: 1.4;
         }
         .inquiry-box input {
             width: 100%;
             padding: 14px;
             margin: 20px 0 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
             font-size: 1.1em;
             text-align: center;
             box-sizing: border-box;
@@ -218,7 +216,7 @@
             color: #111;
             border: none;
             padding: 14px 30px;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 800;
             width: 100%;
@@ -231,88 +229,104 @@
             transform: translateY(-2px);
         }
 
-        /* Results Area */
+        /* Results Area - Updated Layout */
         #q-display {
             margin-top: 25px;
             display: none;
-            text-align: right;
             animation: fadeIn 0.5s ease-in-out;
-            background: #faf8f5;
-            padding: 20px;
+            background: #fbfaf6;
+            padding: 25px 20px;
             border-radius: 12px;
             border: 1px solid #ebd299;
         }
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .data-table td {
-            padding: 12px 8px;
+
+        .result-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
             border-bottom: 1px solid #e2d9c8;
-            vertical-align: middle;
         }
-        .label {
-            font-weight: 700;
-            color: var(--dark-gold);
+        .result-row:last-of-type {
+            border-bottom: none;
+            padding-bottom: 25px;
+        }
+
+        .result-label {
+            font-weight: 800;
+            color: #222;
             width: 30%;
+            text-align: right;
+            font-size: 1.05em;
+        }
+
+        .result-value-container {
+            width: 65%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-value {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #333;
+            text-align: center;
+            line-height: 1.4;
+        }
+        .result-value.password-text {
+            color: #c9302c;
+            letter-spacing: 1px;
         }
 
         /* أزرار النسخ الصغيرة */
         .btn-copy {
-            background: #e0e0e0;
+            background: #e6e6e6;
             color: #333;
             border: 1px solid #ccc;
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 6px;
-            font-size: 0.82em;
+            font-size: 0.85em;
             font-family: 'Tajawal', sans-serif;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 5px;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             transition: all 0.2s ease;
         }
         .btn-copy:hover {
-            background: var(--gold-primary);
+            background: #d4af37;
             color: #fff;
-            border-color: var(--gold-dark);
+            border-color: #aa7c11;
         }
 
-        .value-box {
+        /* أزرار المنصات المكدسة */
+        .platform-links-stacked {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 2px;
+            gap: 12px;
+            margin-top: 10px;
         }
-
-        .platform-links {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-        .btn-platform {
-            flex: 1;
-            min-width: 140px;
+        .btn-platform-full {
+            display: block;
+            width: 100%;
             text-align: center;
-            padding: 10px 12px;
-            text-decoration: none;
+            padding: 14px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 0.9em;
+            font-size: 1.1em;
+            text-decoration: none;
             transition: 0.3s;
-        }
-        .btn-qureo {
-            background: #28a745;
             color: white;
+            box-sizing: border-box;
         }
-        .btn-qureo:hover { background: #218838; }
+        .btn-qureo-full { background: #28a745; }
+        .btn-qureo-full:hover { background: #218838; }
 
-        .btn-finance {
-            background: #17a2b8;
-            color: white;
-        }
-        .btn-finance:hover { background: #138496; }
+        .btn-finance-full { background: #17a2b8; }
+        .btn-finance-full:hover { background: #138496; }
 
         /* Footer */
         .footer {
@@ -333,7 +347,6 @@
 
         @media (max-width: 600px) {
             .hero h1 { font-size: 1.8em; }
-            .platform-links { flex-direction: column; }
             .btn-gold-link { width: 100%; }
         }
     </style>
@@ -380,7 +393,7 @@
         <!-- صندوق الاستعلام عن منصة كوريو -->
         <div class="inquiry-container">
             <div class="inquiry-box">
-                <h2>منصة كوريو (AI)</h2>
+                <h2>الاستعلام عن الكود واسم المستخدم وكلمة المرور لمنصة كوريو AI</h2>
                 <p style="color: #666; font-size: 0.95em;">أدخل الرقم القومي الخاص بك للحصول على بيانات الدخول</p>
                 <p style="color: #888; font-size: 0.85em; margin-top: -8px;">(لتجربة الموقع يمكنك استخدام الرقم القومي: <b style="color:var(--gold-dark)">ادخل الـ 14 رقماً </b>)</p>
 
@@ -388,33 +401,33 @@
                 <button class="btn-search" onclick="fetchQureoData()">استعلام الآن</button>
 
                 <div id="q-display">
-                    <table class="data-table">
-                        <tr>
-                            <td class="label">الاسم:</td>
-                            <td><span id="s-name"></span></td>
-                        </tr>
-                        <tr>
-                            <td class="label">اسم المستخدم (أو الكود):</td>
-                            <td>
-                                <div class="value-box">
-                                    <span id="s-user" style="direction: ltr; text-align: right; font-weight: bold;"></span>
-                                    <button class="btn-copy" onclick="copyText('s-user', this)">📋 نسخ اسم المستخدم</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="label">كلمة المرور:</td>
-                            <td>
-                                <div class="value-box">
-                                    <span id="s-pass" style="color:#d9534f; font-weight:bold; direction: ltr; text-align: right;"></span>
-                                    <button class="btn-copy" onclick="copyText('s-pass', this)">📋 نسخ كلمة المرور</button>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                    
+                    <div class="result-row">
+                        <div class="result-label">الاسم:</div>
+                        <div class="result-value-container">
+                            <span class="result-value" id="s-name"></span>
+                        </div>
+                    </div>
 
-                    <div class="platform-links">
-                        <a id="s-link" href="#" target="_blank" class="btn-platform btn-qureo">دخول المنصة</a>
+                    <div class="result-row">
+                        <div class="result-label">اسم المستخدم:</div>
+                        <div class="result-value-container">
+                            <span class="result-value" id="s-user" style="direction: ltr;"></span>
+                            <button class="btn-copy" onclick="copyText('s-user', this)">📋 نسخ اسم المستخدم</button>
+                        </div>
+                    </div>
+
+                    <div class="result-row">
+                        <div class="result-label">كلمة المرور:</div>
+                        <div class="result-value-container">
+                            <span class="result-value password-text" id="s-pass" style="direction: ltr;"></span>
+                            <button class="btn-copy" onclick="copyText('s-pass', this)">📋 نسخ كلمة المرور</button>
+                        </div>
+                    </div>
+
+                    <div class="platform-links-stacked">
+                        <a id="s-link" href="#" target="_blank" class="btn-platform-full btn-qureo-full">دخول كوريو</a>
+                        <a href="https://egy.app.spx-learning-square.com/login" target="_blank" class="btn-platform-full btn-finance-full">دخول الثقافة المالية</a>
                     </div>
                 </div>
 
@@ -487,23 +500,23 @@
             }
         }
 
-        // دالة عرض بيانات الطالب (التي تدعم اختلاف الهيكل بين الملفين)
+        // دالة عرض بيانات الطالب
         function renderStudentData(student) {
             // عرض الاسم
             document.getElementById('s-name').innerText = student["الاسم"] || "غير متاح";
             
-            // عرض اسم المستخدم: إذا كان طالباً من data.json سيقرأ اسم المستخدم، وإذا كان من mnazel.json سيقرأ الكود 
+            // عرض اسم المستخدم أو الكود 
             const username = student["اسم المستخدم"] || student["كود الطالب"] || student["الكود"] || "غير متوفر";
             document.getElementById('s-user').innerText = username;
             
-            // عرض كلمة المرور: طلاب المنازل لا يمتلكون كلمة مرور في الملف، لذا نعرض رسالة مناسبة
+            // عرض كلمة المرور
             if (student["كلمة المرور"]) {
                 document.getElementById('s-pass').innerText = student["كلمة المرور"];
             } else {
                 document.getElementById('s-pass').innerText = "غير متوفرة";
             }
 
-            // رابط المنصة: قراءة الرابط إن وجد بأسماء مختلفة، وإلا وضع الرابط الافتراضي
+            // رابط المنصة الافتراضي
             const qureoUrl = student["رابط منصة"] || student["رابط منصة "] || student["رابط المنصة"] || "https://me-portal.qureo.education";
             document.getElementById('s-link').href = qureoUrl;
 
@@ -520,11 +533,13 @@
                 btnElement.innerText = "✓ تم النسخ!";
                 btnElement.style.background = "#28a745";
                 btnElement.style.color = "#fff";
+                btnElement.style.borderColor = "#28a745";
 
                 setTimeout(() => {
                     btnElement.innerText = originalText;
-                    btnElement.style.background = "#e0e0e0";
+                    btnElement.style.background = "#e6e6e6";
                     btnElement.style.color = "#333";
+                    btnElement.style.borderColor = "#ccc";
                 }, 2000);
             }).catch(err => {
                 console.error("فشل النسخ: ", err);
