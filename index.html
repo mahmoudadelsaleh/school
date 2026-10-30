@@ -98,8 +98,8 @@ body{font-family:'Tajawal',sans-serif;margin:0;padding:0;background:#f4f5f7;colo
 </footer>
 
 <script>
-// ملفات البيانات: data.json أساسي، وأي ملف إضافي اختياري (لا يسبب خطأ لو غير موجود)
-const DATA_FILES = ['data.json', 'mnazel.json'];
+// ملفات البيانات الجديدة (data1.json أساسي و data2.json إضافي)
+const DATA_FILES = ['data1.json', 'data2.json'];
 let studentsCache = null;
 
 // يحوّل الأرقام العربية (٠-٩) والفارسية (۰-۹) إلى إنجليزية ويحذف أي حرف غير رقمي
@@ -163,8 +163,8 @@ async function fetchQureoData() {
     } catch (err) {
         console.error(err);
         error.innerText = location.protocol === 'file:'
-            ? 'لا يمكن قراءة data.json عند فتح الصفحة مباشرة من الجهاز. ارفع الموقع على استضافة أو شغّله عبر خادم محلي.'
-            : 'تعذر قراءة ملف data.json. تأكد أنه في نفس مجلد index.html وبنفس الاسم تماماً.';
+            ? 'لا يمكن قراءة data1.json عند فتح الصفحة مباشرة من الجهاز. ارفع الموقع على استضافة أو شغّله عبر خادم محلي.'
+            : 'تعذر قراءة ملف data1.json. تأكد أنه في نفس مجلد index.html وبنفس الاسم تماماً.';
     }
 }
 
